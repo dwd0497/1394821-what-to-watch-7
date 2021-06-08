@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FilmCard from '../film-card/film-card';
+import Logo from '../../UI/logo/logo';
+import User from '../../UI/user/user';
+import Footer from '../../UI/footer/footer';
+import FilmCard from '../../UI/film-card/film-card';
 
 function Main({promoFilm: {title, genre, date}, filmsCount}) {
   return (
@@ -14,24 +17,9 @@ function Main({promoFilm: {title, genre, date}, filmsCount}) {
         <h1 className="visually-hidden">WTW</h1>
 
         <header className="page-header film-card__head">
-          <div className="logo">
-            <a className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo />
 
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
-            </li>
-          </ul>
+          <User />
         </header>
 
         <div className="film-card__wrap">
@@ -112,19 +100,7 @@ function Main({promoFilm: {title, genre, date}, filmsCount}) {
           </div>
         </section>
 
-        <footer className="page-footer">
-          <div className="logo">
-            <a className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
-
-          <div className="copyright">
-            <p>© 2019 What to watch Ltd.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );
@@ -132,13 +108,11 @@ function Main({promoFilm: {title, genre, date}, filmsCount}) {
 
 Main.propTypes = {
   filmsCount: PropTypes.number.isRequired,
-  promoFilm: PropTypes.objectOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      genre: PropTypes.string.isRequired,
-      date: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
+  promoFilm: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    genre: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Main;
