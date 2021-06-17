@@ -1,9 +1,11 @@
 import React from 'react';
 
-function Player() {
+import filmCardProp from '../../UI/film-card/film-card.prop';
+
+function Player({film}) {
   return (
     <div className="player">
-      <video src="#" className="player__video" poster="img/player-poster.jpg"></video>
+      <video src={film.videoLink} className="player__video" poster={film.posterImage}></video>
 
       <button type="button" className="player__exit">Exit</button>
 
@@ -36,5 +38,9 @@ function Player() {
     </div>
   );
 }
+
+Player.propTypes = {
+  film: filmCardProp.isRequired,
+};
 
 export default Player;
