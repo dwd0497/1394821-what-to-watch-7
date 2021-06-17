@@ -17,5 +17,5 @@ export default PropTypes.shape({
   runTime: PropTypes.number.isRequired,
   genre: PropTypes.string.isRequired,
   released: PropTypes.number.isRequired,
-  isFavorite: PropTypes.bool.isRequired
-})
+  isFavorite: PropTypes.bool.isRequired,
+});

@@ -12,7 +12,7 @@ import AddReview from '../pages/add-review/add-review';
 import Player from '../pages/player/player';
 import NotFound from '../pages/not-found/not-found';
 
-import filmCardProp from '../UI/film-card/film-card.prop'
+import filmCardProp from '../UI/film-card/film-card.prop';
 
 function App({promoFilm, filmsCount, films, comments}) {
   return (
