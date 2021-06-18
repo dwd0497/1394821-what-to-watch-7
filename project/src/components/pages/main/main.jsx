@@ -4,21 +4,21 @@ import PropTypes from 'prop-types';
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
-import FilmCard from '../../UI/film-card/film-card';
+import FilmsList from '../../UI/films-list/films-list';
 
-function Main({promoFilm: {title, genre, date}, filmsCount}) {
+import filmCardProp from '../../UI/film-card/film-card.prop';
+
+function Main({promoFilm, filmsCount, films}) {
+  const {title, genre, date} = promoFilm;
   return (
     <>
       <section className="film-card">
         <div className="film-card__bg">
           <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
         </div>
-
         <h1 className="visually-hidden">WTW</h1>
-
         <header className="page-header film-card__head">
           <Logo />
-
           <User />
         </header>
 
@@ -91,9 +91,7 @@ function Main({promoFilm: {title, genre, date}, filmsCount}) {
             </li>
           </ul>
 
-          <div className="catalog__films-list">
-            {Array(filmsCount).fill().map(() => <FilmCard key={Date.now()} />)}
-          </div>
+          <FilmsList filmsCount={filmsCount} films={films} />
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
@@ -113,6 +111,7 @@ Main.propTypes = {
     genre: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   }).isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
 };
 
 export default Main;

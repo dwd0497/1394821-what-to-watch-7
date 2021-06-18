@@ -12,27 +12,29 @@ import AddReview from '../pages/add-review/add-review';
 import Player from '../pages/player/player';
 import NotFound from '../pages/not-found/not-found';
 
-function App({promoFilm, filmsCount}) {
+import filmCardProp from '../UI/film-card/film-card.prop';
+
+function App({promoFilm, filmsCount, films, comments}) {
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.MAIN}>
-          <Main promoFilm={promoFilm} filmsCount={filmsCount} />
+          <Main promoFilm={promoFilm} filmsCount={filmsCount} films={films} />
         </Route>
         <Route exact path={AppRoute.LOGIN}>
           <Login />
         </Route>
         <Route exact path={AppRoute.MY_LIST}>
-          <Mylist filmsCount={filmsCount} />
+          <Mylist filmsCount={filmsCount} films={films} />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film filmsCount={filmsCount} />
+          <Film filmsCount={filmsCount} film={films[1]} films={films} />
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
-          <AddReview />
+          <AddReview film={films[1]} />
         </Route>
         <Route exact path={AppRoute.PLAYER}>
-          <Player />
+          <Player film={films[1]} />
         </Route>
         <Route>
           <NotFound />
@@ -49,6 +51,8 @@ App.propTypes = {
     genre: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   }).isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  comments: PropTypes.array.isRequired,
 };
 
 export default App;
