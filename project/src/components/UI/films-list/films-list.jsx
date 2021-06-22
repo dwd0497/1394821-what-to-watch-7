@@ -1,22 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import FilmCard from '../film-card/film-card';
 
 import filmCardProp from '../film-card/film-card.prop';
 
-function FilmsList({films, filmsCount}) {
-  const [, setActiveFilmId] = useState(null);
-  const [renderedFilms] = useState(films.slice(0, filmsCount));
+function FilmsList({films, renderFilmsCount}) {
 
   return (
     <div className="catalog__films-list">
-      {renderedFilms.map((film) => (
+      {films.slice(0, renderFilmsCount).map((film) => (
         <FilmCard
           key={film.id}
           film={film}
-          onMouseEnter={() => setActiveFilmId(film.id)}
-          onMouseLeave={() => setActiveFilmId(null)}
         />
       ))}
     </div>
@@ -24,7 +20,7 @@ function FilmsList({films, filmsCount}) {
 }
 
 FilmsList.propTypes = {
-  filmsCount: PropTypes.number.isRequired,
+  renderFilmsCount: PropTypes.number.isRequired,
   films: PropTypes.arrayOf(filmCardProp).isRequired,
 };
 

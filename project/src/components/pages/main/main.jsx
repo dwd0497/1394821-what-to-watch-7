@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import Logo from '../../UI/logo/logo';
@@ -10,6 +10,21 @@ import filmCardProp from '../../UI/film-card/film-card.prop';
 
 function Main({promoFilm, filmsCount, films}) {
   const {title, genre, date} = promoFilm;
+  const [renderFilmsCount, setRenderFilmsCount] = useState(filmsCount);
+  const [isShowMoreRender, setIsShowMoreRender] = useState(true);
+
+  React.useEffect(() => {
+    if (renderFilmsCount >= films.length) {
+      setIsShowMoreRender(false);
+    }
+  }, [renderFilmsCount]);
+
+  const onShowMoreClick = () => {
+    if (renderFilmsCount < films.length) {
+      setRenderFilmsCount((prevCount) => prevCount + 4);
+    }
+  };
+
   return (
     <>
       <section className="film-card">
@@ -91,11 +106,14 @@ function Main({promoFilm, filmsCount, films}) {
             </li>
           </ul>
 
-          <FilmsList filmsCount={filmsCount} films={films} />
+          <FilmsList renderFilmsCount={renderFilmsCount} films={films} />
 
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          {isShowMoreRender && (
+            <div className="catalog__more">
+              <button className="catalog__button" type="button" onClick={onShowMoreClick}>Show more</button>
+            </div>
+          )}
+
         </section>
 
         <Footer />
