@@ -10,7 +10,8 @@ const promoFilm = {
   date: '2014',
 };
 
-const FILMS_COUNT = 20;
+// Временно уменьшил кол-во фильмов, чтоб тестить кнопку ShowMore, потом вернуть 20
+const FILMS_COUNT = 4;
 
 ReactDOM.render(
   <React.StrictMode>
