@@ -147,7 +147,7 @@ const films = [
     director: 'Лилли Вачовски',
     starring: ['Киану Ривз'],
     runTime: 522,
-    genre: 'Боевик',
+    genre: 'Фантастика',
     released: 1999,
     isFavorite: false,
   },
