@@ -10,5 +10,5 @@ export const AppRoute = {
 export const Tabs = {
   OVERVIEW: 'Overview',
   DETAILS: 'Details',
-  REVIEWS: 'Reviews'
+  REVIEWS: 'Reviews',
 };

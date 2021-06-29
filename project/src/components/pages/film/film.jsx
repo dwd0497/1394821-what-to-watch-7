@@ -11,6 +11,7 @@ import FilmsTabs from '../../UI/film-tabs/film-tabs';
 import {AppRoute} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
+import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
 
 function Film({filmsCount, film, films, comments}) {
   return (
@@ -82,9 +83,10 @@ function Film({filmsCount, film, films, comments}) {
 }
 
 Film.propTypes = {
-  renderFilmsCount: PropTypes.number.isRequired,
+  filmsCount: PropTypes.number.isRequired,
   film: filmCardProp.isRequired,
   films: PropTypes.arrayOf(filmCardProp).isRequired,
+  comments: PropTypes.arrayOf(filmCommentProp).isRequired,
 };
 
 export default Film;
