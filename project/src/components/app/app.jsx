@@ -28,7 +28,7 @@ function App({promoFilm, filmsCount, films, comments}) {
           <Mylist filmsCount={filmsCount} films={films} />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film filmsCount={filmsCount} film={films[1]} films={films} />
+          <Film filmsCount={filmsCount} film={films[1]} films={films} comments={comments} />
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
           <AddReview film={films[1]} />

@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
+
+import {AppRoute} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 
@@ -51,12 +54,12 @@ function Main({promoFilm, filmsCount, films}) {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <Link to={AppRoute.PLAYER} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
-                </button>
+                </Link>
                 <button className="btn btn--list film-card__button" type="button">
                   <svg viewBox="0 0 19 20" width="19" height="20">
                     <use xlinkHref="#add"></use>

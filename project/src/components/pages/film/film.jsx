@@ -6,13 +6,14 @@ import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
+import FilmsTabs from '../../UI/film-tabs/film-tabs';
 
 import {AppRoute} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
+import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
 
-
-function Film({filmsCount, film, films}) {
+function Film({filmsCount, film, films, comments}) {
   return (
     <>
       <section className="film-card film-card--full">
@@ -37,12 +38,12 @@ function Film({filmsCount, film, films}) {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <Link to={AppRoute.PLAYER} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
-                </button>
+                </Link>
                 <button className="btn btn--list film-card__button" type="button">
                   <svg viewBox="0 0 19 20" width="19" height="20">
                     <use xlinkHref="#add"></use>
@@ -62,35 +63,7 @@ function Film({filmsCount, film, films}) {
             </div>
 
             <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
-
-              <div className="film-rating">
-                <div className="film-rating__score">{film.rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">{film.scoresCount} ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                {film.description}
-
-                <p className="film-card__director"><strong>Director: {film.director}</strong></p>
-
-                <p className="film-card__starring"><strong>Starring: {film.starring.join(', ')} and other</strong></p>
-              </div>
+              <FilmsTabs film={film} comments={comments} />
             </div>
           </div>
         </div>
@@ -100,7 +73,7 @@ function Film({filmsCount, film, films}) {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList filmsCount={filmsCount} films={films} />
+          <FilmsList renderFilmsCount={filmsCount} films={films.filter((item) => item.genre === film.genre && film.id !== item.id)} />
         </section>
 
         <Footer />
@@ -113,6 +86,7 @@ Film.propTypes = {
   filmsCount: PropTypes.number.isRequired,
   film: filmCardProp.isRequired,
   films: PropTypes.arrayOf(filmCardProp).isRequired,
+  comments: PropTypes.arrayOf(filmCommentProp).isRequired,
 };
 
 export default Film;

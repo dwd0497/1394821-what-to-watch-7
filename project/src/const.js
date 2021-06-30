@@ -6,3 +6,9 @@ export const AppRoute = {
   ADD_REVIEW: '/dev-add-review',
   PLAYER: '/dev-player',
 };
+
+export const Tabs = {
+  OVERVIEW: 'Overview',
+  DETAILS: 'Details',
+  REVIEWS: 'Reviews',
+};
