@@ -13,17 +13,17 @@ function VideoPlayer({isPlaying, previewVideoLink, posterImage}) {
   useEffect(() => {
     videoRef.current.onloadeddata = () => setIsLoading(false);
     videoRef.current.muted = true;
-
     return () => {
-      videoRef.current.onloadeddata = null;
-      videoRef.current.onplay = null;
-      videoRef.current.onpause = null;
-      videoRef.current = null;
+      // Выскакивает ошибка
+      // videoRef.current.onloadeddata = null;
+      // videoRef.current.muted = null;
+      // videoRef.current = null;
     };
   }, [previewVideoLink]);
 
   useEffect(() => {
     if (isPlaying && !isLoading) {
+
       setDelay(setTimeout(() => {
         videoRef.current.play();
       }, 1000));

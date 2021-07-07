@@ -19,16 +19,16 @@ function App({promoFilm, filmsCount, films, comments}) {
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.MAIN}>
-          <Main promoFilm={promoFilm} filmsCount={filmsCount} films={films} />
+          <Main promoFilm={promoFilm} filmsCount={filmsCount} />
         </Route>
         <Route exact path={AppRoute.LOGIN}>
           <Login />
         </Route>
         <Route exact path={AppRoute.MY_LIST}>
-          <Mylist filmsCount={filmsCount} films={films} />
+          <Mylist filmsCount={filmsCount} />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film filmsCount={filmsCount} film={films[1]} films={films} comments={comments} />
+          <Film filmsCount={filmsCount} film={films[1]} comments={comments} />
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
           <AddReview film={films[1]} />

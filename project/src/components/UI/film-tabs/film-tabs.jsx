@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 
 import filmCardProp from '../film-card/film-card.prop';
 import filmCommentProp from './film-comment.prop';
@@ -119,7 +120,7 @@ function FilmTabs({film, comments}) {
 
 FilmTabs.propTypes = {
   film: filmCardProp.isRequired,
-  comments: filmCommentProp,
+  comments: PropTypes.arrayOf(filmCommentProp).isRequired,
 };
 
 export default FilmTabs;

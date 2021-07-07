@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
@@ -12,8 +13,14 @@ import {AppRoute} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
+import {ActionCreator} from '../../../store/actions';
 
-function Film({filmsCount, film, films, comments}) {
+function Film({filmsCount, film, comments, getFilteredFilms, filtredFilms}) {
+
+  useEffect(() => {
+    getFilteredFilms(film.genre);
+  }, []);
+
   return (
     <>
       <section className="film-card film-card--full">
@@ -73,7 +80,7 @@ function Film({filmsCount, film, films, comments}) {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList renderFilmsCount={filmsCount} films={films.filter((item) => item.genre === film.genre && film.id !== item.id)} />
+          <FilmsList filmsCount={filmsCount} films={filtredFilms} />
         </section>
 
         <Footer />
@@ -85,8 +92,20 @@ function Film({filmsCount, film, films, comments}) {
 Film.propTypes = {
   filmsCount: PropTypes.number.isRequired,
   film: filmCardProp.isRequired,
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  filtredFilms: PropTypes.arrayOf(filmCardProp).isRequired,
   comments: PropTypes.arrayOf(filmCommentProp).isRequired,
+  getFilteredFilms: PropTypes.func.isRequired,
 };
 
-export default Film;
+const mapStateToProps = (state) => ({
+  filtredFilms: state.filtredFilms,
+});
+
+const mapDispatchToState = (dispatch) => ({
+  getFilteredFilms(genre) {
+    dispatch(ActionCreator.changeActiveGenreFilter(genre));
+  },
+});
+
+export {Film};
+export default connect(mapStateToProps, mapDispatchToState)(Film);
