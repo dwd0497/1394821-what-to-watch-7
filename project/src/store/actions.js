@@ -1,10 +1,10 @@
 export const ActionType = {
-  CHANGE_ACTIVE_GENRE_FILTER: 'changeActiveGenreFilter',
+  CHANGE_ACTIVE_FILTER: 'changeActiveFilter',
 };
 
 export const ActionCreator = {
-  changeActiveGenreFilter: (genre) => ({
-    type: ActionType.CHANGE_ACTIVE_GENRE_FILTER,
-    payload: genre,
+  changeActiveFilter: (filter) => ({
+    type: ActionType.CHANGE_ACTIVE_FILTER,
+    payload: filter,
   }),
 };

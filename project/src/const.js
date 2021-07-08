@@ -14,3 +14,4 @@ export const Tabs = {
 };
 
 export const ALL_GENRES = 'All genres';
+export const TYPE_GENRE = 'genre';

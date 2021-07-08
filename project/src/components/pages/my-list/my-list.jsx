@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
@@ -7,9 +7,14 @@ import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 
-import filmCardProp from '../../UI/film-card/film-card.prop';
+import {ActionCreator} from '../../../store/actions';
 
-function MyList({filmsCount, films}) {
+function MyList({filmsCount, changeActiveFilter}) {
+
+  useEffect(() => {
+    changeActiveFilter({type: 'isFavorite', value: true});
+  }, []);
+
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -20,7 +25,7 @@ function MyList({filmsCount, films}) {
 
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
-        <FilmsList filmsCount={filmsCount} films={films} />
+        <FilmsList filmsCount={filmsCount} />
       </section>
 
       <Footer />
@@ -30,12 +35,14 @@ function MyList({filmsCount, films}) {
 
 MyList.propTypes = {
   filmsCount: PropTypes.number.isRequired,
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  changeActiveFilter: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  films: state.films,
+const mapDispatchToState = (dispatch) => ({
+  changeActiveFilter(genre) {
+    dispatch(ActionCreator.changeActiveFilter(genre));
+  },
 });
 
 export {MyList};
-export default connect(mapStateToProps, null)(MyList);
+export default connect(null, mapDispatchToState)(MyList);

@@ -6,10 +6,10 @@ import {ActionCreator} from '../../../store/actions';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 
-import {ALL_GENRES} from '../../../const';
+import {ALL_GENRES, TYPE_GENRE} from '../../../const';
 
 function GenresList(props) {
-  const {activeGenreFilter, films, onFilterChange} = props;
+  const {activeFilter, films, onFilterChange} = props;
 
   const genresList = [ALL_GENRES];
 
@@ -19,13 +19,13 @@ function GenresList(props) {
 
   const onGenreClick = (evt) => {
     evt.preventDefault();
-    onFilterChange(evt.target.id);
+    onFilterChange({type: TYPE_GENRE, value: evt.target.id});
   };
 
   return (
     <ul className="catalog__genres-list">
       {genresList.map((genre) => (
-        <li className={activeGenreFilter === genre ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} key={genre}>
+        <li className={activeFilter.value === genre ? 'catalog__genres-item catalog__genres-item--active' : 'catalog__genres-item'} key={genre}>
           <span className="catalog__genres-link" onClick={onGenreClick} id={genre}>{genre}</span>
         </li>
       ))}
@@ -35,18 +35,21 @@ function GenresList(props) {
 
 GenresList.propTypes = {
   films: PropTypes.arrayOf(filmCardProp).isRequired,
-  activeGenreFilter: PropTypes.string.isRequired,
+  activeFilter: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
+  }).isRequired,
   onFilterChange: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   films: state.films,
-  activeGenreFilter: state.activeGenreFilter,
+  activeFilter: state.activeFilter,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onFilterChange(genre) {
-    dispatch(ActionCreator.changeActiveGenreFilter(genre));
+    dispatch(ActionCreator.changeActiveFilter(genre));
   },
 });
 

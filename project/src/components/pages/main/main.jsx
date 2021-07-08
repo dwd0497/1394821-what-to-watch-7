@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -9,23 +9,28 @@ import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 import GenresList from '../../UI/genres-list/genres-list';
 
-import {AppRoute} from '../../../const';
+import {AppRoute, ALL_GENRES, TYPE_GENRE} from '../../../const';
+import {ActionCreator} from '../../../store/actions';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 
-function Main({promoFilm, filmsCount, filtredFilms}) {
+function Main({promoFilm, filmsCount, films, changeActiveFilter}) {
   const {title, genre, date} = promoFilm;
   const [renderFilmsCount, setRenderFilmsCount] = useState(filmsCount);
   const [isShowMoreRender, setIsShowMoreRender] = useState(true);
 
-  React.useEffect(() => {
-    if (renderFilmsCount >= filtredFilms.length) {
+  useEffect(() => {
+    changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
+  }, []);
+
+  useEffect(() => {
+    if (renderFilmsCount >= films.length) {
       setIsShowMoreRender(false);
     }
   }, [renderFilmsCount]);
 
   const onShowMoreClick = () => {
-    if (renderFilmsCount < filtredFilms.length) {
+    if (renderFilmsCount < films.length) {
       setRenderFilmsCount((prevCount) => prevCount + 4);
     }
   };
@@ -80,7 +85,7 @@ function Main({promoFilm, filmsCount, filtredFilms}) {
 
           <GenresList />
 
-          <FilmsList filmsCount={renderFilmsCount} films={filtredFilms} />
+          <FilmsList filmsCount={renderFilmsCount} />
 
           {isShowMoreRender && (
             <div className="catalog__more">
@@ -103,14 +108,20 @@ Main.propTypes = {
     genre: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   }).isRequired,
-  filtredFilms: PropTypes.arrayOf(filmCardProp).isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  changeActiveFilter: PropTypes.func.isRequired,
 };
 
-
 const mapStateToProps = (state) => ({
-  filtredFilms: state.filtredFilms,
+  films: state.films,
+});
+
+const mapDispatchToState = (dispatch) => ({
+  changeActiveFilter(filter) {
+    dispatch(ActionCreator.changeActiveFilter(filter));
+  },
 });
 
 export {Main};
-export default connect(mapStateToProps, null)(Main);
+export default connect(mapStateToProps, mapDispatchToState)(Main);
 
