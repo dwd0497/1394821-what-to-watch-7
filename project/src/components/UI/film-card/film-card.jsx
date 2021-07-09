@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 
 import VideoPlayer from '../video-player/video-player';
@@ -12,8 +12,24 @@ function FilmCard({film}) {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
+  let delay = null;
+
+  useEffect(() => () => {
+    clearTimeout(delay);
+    delay = null;
+  });
+
+  const startPlaying = () => {
+    delay = setTimeout(() => setIsPlaying(true), 1000);
+  };
+
+  const stopPlaying = () => {
+    setIsPlaying(false);
+    clearTimeout(delay);
+  };
+
   return (
-    <article className="small-film-card catalog__films-card" onMouseEnter={() => setIsPlaying(true)} onMouseLeave={() => setIsPlaying(false)}>
+    <article className="small-film-card catalog__films-card" onMouseEnter={startPlaying} onMouseLeave={stopPlaying}>
       <div className="small-film-card__image">
         <VideoPlayer previewVideoLink={previewVideoLink} posterImage={posterImage} isPlaying={isPlaying} />
       </div>

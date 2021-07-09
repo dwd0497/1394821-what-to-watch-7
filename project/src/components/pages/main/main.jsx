@@ -1,22 +1,29 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
+import GenresList from '../../UI/genres-list/genres-list';
 
-import {AppRoute} from '../../../const';
+import {AppRoute, ALL_GENRES, TYPE_GENRE} from '../../../const';
+import {ActionCreator} from '../../../store/actions';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 
-function Main({promoFilm, filmsCount, films}) {
+function Main({promoFilm, filmsCount, films, changeActiveFilter}) {
   const {title, genre, date} = promoFilm;
   const [renderFilmsCount, setRenderFilmsCount] = useState(filmsCount);
   const [isShowMoreRender, setIsShowMoreRender] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
+  }, []);
+
+  useEffect(() => {
     if (renderFilmsCount >= films.length) {
       setIsShowMoreRender(false);
     }
@@ -76,40 +83,9 @@ function Main({promoFilm, filmsCount, films}) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <ul className="catalog__genres-list">
-            <li className="catalog__genres-item catalog__genres-item--active">
-              <a href="#" className="catalog__genres-link">All genres</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Comedies</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Crime</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Documentary</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Dramas</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Horror</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Kids & Family</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Romance</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Sci-Fi</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Thrillers</a>
-            </li>
-          </ul>
+          <GenresList />
 
-          <FilmsList renderFilmsCount={renderFilmsCount} films={films} />
+          <FilmsList filmsCount={renderFilmsCount} />
 
           {isShowMoreRender && (
             <div className="catalog__more">
@@ -133,6 +109,19 @@ Main.propTypes = {
     date: PropTypes.string.isRequired,
   }).isRequired,
   films: PropTypes.arrayOf(filmCardProp).isRequired,
+  changeActiveFilter: PropTypes.func.isRequired,
 };
 
-export default Main;
+const mapStateToProps = (state) => ({
+  films: state.films,
+});
+
+const mapDispatchToState = (dispatch) => ({
+  changeActiveFilter(filter) {
+    dispatch(ActionCreator.changeActiveFilter(filter));
+  },
+});
+
+export {Main};
+export default connect(mapStateToProps, mapDispatchToState)(Main);
+

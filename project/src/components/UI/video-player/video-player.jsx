@@ -1,39 +1,20 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import PropTypes from 'prop-types';
 
 
 function VideoPlayer({isPlaying, previewVideoLink, posterImage}) {
 
-  const [delay, setDelay] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
   const videoRef = useRef();
 
   useEffect(() => {
-    videoRef.current.onloadeddata = () => setIsLoading(false);
     videoRef.current.muted = true;
 
-    return () => {
-      videoRef.current.onloadeddata = null;
-      videoRef.current.onplay = null;
-      videoRef.current.onpause = null;
-      videoRef.current = null;
-    };
-  }, [previewVideoLink]);
-
-  useEffect(() => {
-    if (isPlaying && !isLoading) {
-      setDelay(setTimeout(() => {
-        videoRef.current.play();
-      }, 1000));
-
-      return;
+    if (isPlaying) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.load();
     }
-
-    clearTimeout(delay);
-    videoRef.current.pause();
-    videoRef.current.load();
   }, [isPlaying]);
 
   return (

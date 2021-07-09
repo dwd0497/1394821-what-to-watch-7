@@ -12,3 +12,6 @@ export const Tabs = {
   DETAILS: 'Details',
   REVIEWS: 'Reviews',
 };
+
+export const ALL_GENRES = 'All genres';
+export const TYPE_GENRE = 'genre';
