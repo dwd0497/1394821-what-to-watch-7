@@ -9,18 +9,18 @@ import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 import FilmsTabs from '../../UI/film-tabs/film-tabs';
 
-import {AppRoute, FILMS_COUNT, TYPE_GENRE} from '../../../const';
+import {AppRoute, TYPE_GENRE} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
-import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
 import {ActionCreator} from '../../../store/actions';
 
-function Film({film, comments, changeActiveFilter, setDisplayedFilmsCount}) {
+function Film({films, changeActiveFilter, match}) {
 
   useEffect(() => {
     changeActiveFilter({type: TYPE_GENRE, value: film.genre});
-    setDisplayedFilmsCount(FILMS_COUNT);
   }, []);
+
+  const film = films.find((item)=> item.id === +match.params.id);
 
   return (
     <>
@@ -48,13 +48,13 @@ function Film({film, comments, changeActiveFilter, setDisplayedFilmsCount}) {
               <div className="film-card__buttons">
                 <Link to={AppRoute.PLAYER} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
+                    <use xlinkHref="#play-s" />
                   </svg>
                   <span>Play</span>
                 </Link>
                 <button className="btn btn--list film-card__button" type="button">
                   <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
+                    <use xlinkHref="#add" />
                   </svg>
                   <span>My list</span>
                 </button>
@@ -71,7 +71,7 @@ function Film({film, comments, changeActiveFilter, setDisplayedFilmsCount}) {
             </div>
 
             <div className="film-card__desc">
-              <FilmsTabs film={film} comments={comments} />
+              <FilmsTabs film={film} />
             </div>
           </div>
         </div>
@@ -91,20 +91,20 @@ function Film({film, comments, changeActiveFilter, setDisplayedFilmsCount}) {
 }
 
 Film.propTypes = {
-  film: filmCardProp.isRequired,
-  comments: PropTypes.arrayOf(filmCommentProp).isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
-  setDisplayedFilmsCount: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  films: state.films,
+});
 
 const mapDispatchToState = (dispatch) => ({
   changeActiveFilter(filter) {
     dispatch(ActionCreator.changeActiveFilter(filter));
   },
-  setDisplayedFilmsCount(count) {
-    dispatch(ActionCreator.setDisplayedFilmsCount(count));
-  },
 });
 
 export {Film};
-export default connect(null, mapDispatchToState)(Film);
+export default connect(mapStateToProps, mapDispatchToState)(Film);

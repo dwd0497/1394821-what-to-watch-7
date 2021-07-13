@@ -8,7 +8,7 @@ import {AppRoute} from '../../../const';
 import filmCardProp from './film-card.prop';
 
 function FilmCard({film}) {
-  const {name, previewVideoLink, posterImage} = film;
+  const {name, previewVideoLink, posterImage, id} = film;
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -35,7 +35,7 @@ function FilmCard({film}) {
       </div>
 
       <h3 className="small-film-card__title">
-        <Link className="small-film-card__link" to={AppRoute.FILM}>{name}</Link>
+        <Link className="small-film-card__link" to={`${AppRoute.FILM}/${id}`}>{name}</Link>
       </h3>
     </article>
   );

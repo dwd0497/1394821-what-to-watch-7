@@ -12,9 +12,10 @@ import ShowMore from '../../UI/show-more/show-more';
 
 import {AppRoute, ALL_GENRES, TYPE_GENRE, FILMS_COUNT} from '../../../const';
 import {ActionCreator} from '../../../store/actions';
+import filmCardProp from '../../UI/film-card/film-card.prop';
 
 function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
-  const {title, genre, date} = promoFilm;
+  const {name, genre, released, backgroundImage, posterImage} = promoFilm;
 
   useEffect(() => {
     changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
@@ -25,7 +26,7 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
     <>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={backgroundImage} alt={promoFilm} />
         </div>
         <h1 className="visually-hidden">WTW</h1>
         <header className="page-header film-card__head">
@@ -36,14 +37,14 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={posterImage} alt={name} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{title}</h2>
+              <h2 className="film-card__title">{name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{date}</span>
+                <span className="film-card__year">{released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -84,17 +85,13 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
 }
 
 Main.propTypes = {
-  promoFilm: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-  }).isRequired,
+  promoFilm: filmCardProp.isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
   setDisplayedFilmsCount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  films: state.films,
+  promoFilm: state.promoFilm,
 });
 
 const mapDispatchToState = (dispatch) => ({

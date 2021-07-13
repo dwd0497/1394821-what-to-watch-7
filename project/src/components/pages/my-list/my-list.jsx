@@ -8,13 +8,11 @@ import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 
 import {ActionCreator} from '../../../store/actions';
-import {FILMS_COUNT} from '../../../const';
 
-function MyList({changeActiveFilter, setDisplayedFilmsCount}) {
+function MyList({changeActiveFilter}) {
 
   useEffect(() => {
     changeActiveFilter({type: 'isFavorite', value: true});
-    setDisplayedFilmsCount(FILMS_COUNT);
   }, []);
 
   return (
@@ -37,15 +35,11 @@ function MyList({changeActiveFilter, setDisplayedFilmsCount}) {
 
 MyList.propTypes = {
   changeActiveFilter: PropTypes.func.isRequired,
-  setDisplayedFilmsCount: PropTypes.func.isRequired,
 };
 
 const mapDispatchToState = (dispatch) => ({
   changeActiveFilter(genre) {
     dispatch(ActionCreator.changeActiveFilter(genre));
-  },
-  setDisplayedFilmsCount(count) {
-    dispatch(ActionCreator.setDisplayedFilmsCount(count));
   },
 });
 

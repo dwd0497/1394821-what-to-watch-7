@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {ActionCreator} from '../../../store/actions';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {FILMS_COUNT_STEP} from '../../../const';
 
 function ShowMore({displayedFilmsCount, setDisplayedFilmsCount, filteredFilmsCount}) {
   const [isShowMoreRender, setIsShowMoreRender] = useState(true);
@@ -12,7 +13,7 @@ function ShowMore({displayedFilmsCount, setDisplayedFilmsCount, filteredFilmsCou
 
   const onShowMoreClick = () => {
     if (displayedFilmsCount < filteredFilmsCount) {
-      setDisplayedFilmsCount(displayedFilmsCount + 4);
+      setDisplayedFilmsCount(displayedFilmsCount + FILMS_COUNT_STEP);
     }
   };
 

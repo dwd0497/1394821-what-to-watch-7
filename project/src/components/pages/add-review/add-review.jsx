@@ -8,6 +8,7 @@ import AddReviewForm from '../../UI/add-review-form/add-review-form';
 import {AppRoute} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
+import {connect} from 'react-redux';
 
 function AddReview({film}) {
   return (
@@ -53,4 +54,9 @@ AddReview.propTypes = {
   film: filmCardProp.isRequired,
 };
 
-export default AddReview;
+const mapStateToProps = (state) => ({
+  film: state.films[0],
+});
+
+export {AddReview};
+export default connect(mapStateToProps, null)(AddReview);
