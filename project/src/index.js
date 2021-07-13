@@ -14,15 +14,13 @@ const promoFilm = {
   date: '2014',
 };
 
-// Временно уменьшил кол-во фильмов, чтоб тестить кнопку ShowMore, потом вернуть 20
-const FILMS_COUNT = 4;
 
 const store = createStore(reducer, composeWithDevTools());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App promoFilm={promoFilm} filmsCount={FILMS_COUNT} films={films} comments={comments} />
+      <App promoFilm={promoFilm} films={films} comments={comments} />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

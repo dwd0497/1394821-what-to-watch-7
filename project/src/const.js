@@ -13,5 +13,7 @@ export const Tabs = {
   REVIEWS: 'Reviews',
 };
 
+// Временно уменьшил кол-во фильмов, чтоб тестить кнопку ShowMore, потом вернуть 20
+export const FILMS_COUNT = 4;
 export const ALL_GENRES = 'All genres';
 export const TYPE_GENRE = 'genre';

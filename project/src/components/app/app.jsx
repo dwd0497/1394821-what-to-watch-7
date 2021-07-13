@@ -14,21 +14,21 @@ import NotFound from '../pages/not-found/not-found';
 
 import filmCardProp from '../UI/film-card/film-card.prop';
 
-function App({promoFilm, filmsCount, films, comments}) {
+function App({promoFilm, films, comments}) {
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.MAIN}>
-          <Main promoFilm={promoFilm} filmsCount={filmsCount} />
+          <Main promoFilm={promoFilm} />
         </Route>
         <Route exact path={AppRoute.LOGIN}>
           <Login />
         </Route>
         <Route exact path={AppRoute.MY_LIST}>
-          <Mylist filmsCount={filmsCount} />
+          <Mylist />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film filmsCount={filmsCount} film={films[1]} comments={comments} />
+          <Film film={films[1]} comments={comments} />
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
           <AddReview film={films[1]} />
@@ -45,7 +45,6 @@ function App({promoFilm, filmsCount, films, comments}) {
 }
 
 App.propTypes = {
-  filmsCount: PropTypes.number.isRequired,
   promoFilm: PropTypes.shape({
     title: PropTypes.string.isRequired,
     genre: PropTypes.string.isRequired,

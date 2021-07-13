@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -8,32 +8,18 @@ import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 import GenresList from '../../UI/genres-list/genres-list';
+import ShowMore from '../../UI/show-more/show-more';
 
-import {AppRoute, ALL_GENRES, TYPE_GENRE} from '../../../const';
+import {AppRoute, ALL_GENRES, TYPE_GENRE, FILMS_COUNT} from '../../../const';
 import {ActionCreator} from '../../../store/actions';
 
-import filmCardProp from '../../UI/film-card/film-card.prop';
-
-function Main({promoFilm, filmsCount, films, changeActiveFilter}) {
+function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
   const {title, genre, date} = promoFilm;
-  const [renderFilmsCount, setRenderFilmsCount] = useState(filmsCount);
-  const [isShowMoreRender, setIsShowMoreRender] = useState(true);
 
   useEffect(() => {
     changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
+    setDisplayedFilmsCount(FILMS_COUNT);
   }, []);
-
-  useEffect(() => {
-    if (renderFilmsCount >= films.length) {
-      setIsShowMoreRender(false);
-    }
-  }, [renderFilmsCount]);
-
-  const onShowMoreClick = () => {
-    if (renderFilmsCount < films.length) {
-      setRenderFilmsCount((prevCount) => prevCount + 4);
-    }
-  };
 
   return (
     <>
@@ -85,13 +71,9 @@ function Main({promoFilm, filmsCount, films, changeActiveFilter}) {
 
           <GenresList />
 
-          <FilmsList filmsCount={renderFilmsCount} />
+          <FilmsList />
 
-          {isShowMoreRender && (
-            <div className="catalog__more">
-              <button className="catalog__button" type="button" onClick={onShowMoreClick}>Show more</button>
-            </div>
-          )}
+          <ShowMore />
 
         </section>
 
@@ -102,14 +84,13 @@ function Main({promoFilm, filmsCount, films, changeActiveFilter}) {
 }
 
 Main.propTypes = {
-  filmsCount: PropTypes.number.isRequired,
   promoFilm: PropTypes.shape({
     title: PropTypes.string.isRequired,
     genre: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   }).isRequired,
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
+  setDisplayedFilmsCount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -119,6 +100,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToState = (dispatch) => ({
   changeActiveFilter(filter) {
     dispatch(ActionCreator.changeActiveFilter(filter));
+  },
+  setDisplayedFilmsCount(count) {
+    dispatch(ActionCreator.setDisplayedFilmsCount(count));
   },
 });
 

@@ -8,11 +8,13 @@ import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 
 import {ActionCreator} from '../../../store/actions';
+import {FILMS_COUNT} from '../../../const';
 
-function MyList({filmsCount, changeActiveFilter}) {
+function MyList({changeActiveFilter, setDisplayedFilmsCount}) {
 
   useEffect(() => {
     changeActiveFilter({type: 'isFavorite', value: true});
+    setDisplayedFilmsCount(FILMS_COUNT);
   }, []);
 
   return (
@@ -25,7 +27,7 @@ function MyList({filmsCount, changeActiveFilter}) {
 
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
-        <FilmsList filmsCount={filmsCount} />
+        <FilmsList />
       </section>
 
       <Footer />
@@ -34,13 +36,16 @@ function MyList({filmsCount, changeActiveFilter}) {
 }
 
 MyList.propTypes = {
-  filmsCount: PropTypes.number.isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
+  setDisplayedFilmsCount: PropTypes.func.isRequired,
 };
 
 const mapDispatchToState = (dispatch) => ({
   changeActiveFilter(genre) {
     dispatch(ActionCreator.changeActiveFilter(genre));
+  },
+  setDisplayedFilmsCount(count) {
+    dispatch(ActionCreator.setDisplayedFilmsCount(count));
   },
 });
 

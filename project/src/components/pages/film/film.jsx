@@ -9,16 +9,17 @@ import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 import FilmsTabs from '../../UI/film-tabs/film-tabs';
 
-import {AppRoute, TYPE_GENRE} from '../../../const';
+import {AppRoute, FILMS_COUNT, TYPE_GENRE} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
 import {ActionCreator} from '../../../store/actions';
 
-function Film({filmsCount, film, comments, changeActiveFilter}) {
+function Film({film, comments, changeActiveFilter, setDisplayedFilmsCount}) {
 
   useEffect(() => {
     changeActiveFilter({type: TYPE_GENRE, value: film.genre});
+    setDisplayedFilmsCount(FILMS_COUNT);
   }, []);
 
   return (
@@ -80,7 +81,7 @@ function Film({filmsCount, film, comments, changeActiveFilter}) {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList filmsCount={filmsCount} />
+          <FilmsList />
         </section>
 
         <Footer />
@@ -90,15 +91,18 @@ function Film({filmsCount, film, comments, changeActiveFilter}) {
 }
 
 Film.propTypes = {
-  filmsCount: PropTypes.number.isRequired,
   film: filmCardProp.isRequired,
   comments: PropTypes.arrayOf(filmCommentProp).isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
+  setDisplayedFilmsCount: PropTypes.func.isRequired,
 };
 
 const mapDispatchToState = (dispatch) => ({
   changeActiveFilter(filter) {
     dispatch(ActionCreator.changeActiveFilter(filter));
+  },
+  setDisplayedFilmsCount(count) {
+    dispatch(ActionCreator.setDisplayedFilmsCount(count));
   },
 });
 
