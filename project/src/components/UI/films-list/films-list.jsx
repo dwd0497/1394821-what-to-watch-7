@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
@@ -13,7 +13,10 @@ import {ActionCreator} from '../../../store/actions';
 function FilmsList({films, activeFilter, displayedFilmsCount, setFilteredFilmsCount}) {
   const filterFilms = (allfilms, filter) => filter.type === TYPE_GENRE && filter.value === ALL_GENRES ? allfilms : allfilms.filter((film) => film[filter.type] === filter.value);
   const filteredFilms = filterFilms(films, activeFilter);
-  setFilteredFilmsCount(filteredFilms.length);
+
+  useEffect(() => {
+    setFilteredFilmsCount(filteredFilms.length);
+  }, [films, activeFilter]);
 
   return (
     <div className="catalog__films-list">

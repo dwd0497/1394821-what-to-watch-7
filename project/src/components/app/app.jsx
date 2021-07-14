@@ -1,40 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
 
-import {AppRoute} from '../../const';
+import {AppRoute, AuthorizationStatus} from '../../const';
 
 import Main from '../pages/main/main';
 import Login from '../pages/login/login';
-import Mylist from '../pages/my-list/my-list';
+import MyList from '../pages/my-list/my-list';
 import Film from '../pages/film/film';
 import AddReview from '../pages/add-review/add-review';
 import Player from '../pages/player/player';
 import NotFound from '../pages/not-found/not-found';
+import Loading from '../pages/loading/loading';
 
-import filmCardProp from '../UI/film-card/film-card.prop';
+function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
+  if (authorizationStatus === AuthorizationStatus.UNKNOWN || !isFilmsLoaded || !isPromoLoaded) {
+    return <Loading />;
+  }
 
-function App({promoFilm, films, comments}) {
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.MAIN}>
-          <Main promoFilm={promoFilm} />
+          <Main />
         </Route>
         <Route exact path={AppRoute.LOGIN}>
           <Login />
         </Route>
         <Route exact path={AppRoute.MY_LIST}>
-          <Mylist />
+          <MyList />
         </Route>
-        <Route exact path={AppRoute.FILM}>
-          <Film film={films[1]} comments={comments} />
+        <Route exact path={`${AppRoute.FILM}/:id`} component={Film}>
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
-          <AddReview film={films[1]} />
+          <AddReview />
         </Route>
         <Route exact path={AppRoute.PLAYER}>
-          <Player film={films[1]} />
+          <Player />
         </Route>
         <Route>
           <NotFound />
@@ -45,13 +48,16 @@ function App({promoFilm, films, comments}) {
 }
 
 App.propTypes = {
-  promoFilm: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-  }).isRequired,
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
-  comments: PropTypes.array.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
+  isFilmsLoaded: PropTypes.bool.isRequired,
+  isPromoLoaded: PropTypes.bool.isRequired,
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+  isFilmsLoaded: state.isFilmsLoaded,
+  isPromoLoaded: state.isPromoLoaded,
+});
+
+export {App};
+export default connect(mapStateToProps, null)(App);
