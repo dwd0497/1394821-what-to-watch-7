@@ -1,5 +1,5 @@
 import {ActionCreator} from './actions';
-import {AuthorizationStatus, APIRoute} from '../const';
+import {AuthorizationStatus, APIRoute, AppRoute} from '../const';
 
 export const fetchFilmsList = () => (dispatch, _getState, api) => {
   api.get(APIRoute.FILMS).then(({data}) => dispatch(ActionCreator.loadFilms(adaptFilmsToClient(data))));
@@ -21,13 +21,20 @@ export const checkAuth = () => (dispatch, _getState, api) => {
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) => {
   api.post(APIRoute.LOGIN, {email, password})
-    .then(({data}) => localStorage.setItem('token', data.token))
-    .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)));
+    .then(({data}) => {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('email', data.email);
+    })
+    .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.AUTH)))
+    .then(() => dispatch(ActionCreator.redirectToRoure(AppRoute.MAIN)));
 };
 
 export const logout = () => (dispatch, _getState, api) => {
   api.delete(APIRoute.LOGOUT)
-    .then(() => localStorage.removeItem('token'))
+    .then(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+    })
     .then(() => dispatch(ActionCreator.logout()));
 };
 

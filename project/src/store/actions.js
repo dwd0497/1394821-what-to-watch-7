@@ -7,6 +7,7 @@ export const ActionType = {
   LOAD_COMMENTS: 'data/loadComments',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   LOGOUT: 'user/logout',
+  REDIRECT_TO_ROUTE: 'app/redirectToRoure',
 };
 
 export const ActionCreator = {
@@ -40,6 +41,10 @@ export const ActionCreator = {
   }),
   logout: () => ({
     type: ActionType.LOGOUT,
+  }),
+  redirectToRoure: (url) => ({
+    type: ActionType.REDIRECT_TO_ROUTE,
+    payload: url,
   }),
 };
 
