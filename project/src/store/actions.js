@@ -4,6 +4,7 @@ export const ActionType = {
   SET_DISPLAYED_FILMS_COUNT: 'app/setDisplayedFilmsCount',
   LOAD_FILMS: 'data/loadFilms',
   LOAD_PROMO: 'data/loadPromo',
+  LOAD_FILM: 'data/loadFilm',
   LOAD_COMMENTS: 'data/loadComments',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   LOGOUT: 'user/logout',
@@ -29,6 +30,10 @@ export const ActionCreator = {
   }),
   loadPromo: (film) => ({
     type: ActionType.LOAD_PROMO,
+    payload: film,
+  }),
+  loadFilm: (film) => ({
+    type: ActionType.LOAD_FILM,
     payload: film,
   }),
   loadComments: (filmId) => ({

@@ -9,6 +9,12 @@ export const fetchPromoFilm = () => (dispatch, _getState, api) => {
   api.get(APIRoute.PROMO).then(({data}) => dispatch(ActionCreator.loadPromo(adaptFilmToClient(data))));
 };
 
+export const fetchFilm = (filmId) => (dispatch, _getState, api) => {
+  api.get(`${APIRoute.FILMS}/${filmId}`)
+    .then(({data}) => dispatch(ActionCreator.loadFilm(adaptFilmToClient(data))))
+    .catch(() => dispatch(ActionCreator.redirectToRoure(AppRoute.NOT_FOUND)));
+};
+
 export const fetchComments = (filmId) => (dispatch, _getState, api) => {
   api.get(`${APIRoute.COMMENTS}/${filmId}`).then(({data}) => dispatch(ActionCreator.loadComments(data)));
 };

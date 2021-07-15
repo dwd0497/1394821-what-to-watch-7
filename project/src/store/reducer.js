@@ -8,9 +8,12 @@ const initialState = {
   },
   films: [],
   promoFilm: {},
+  film: {},
   comments: [],
   isFilmsLoaded: false,
   isPromoLoaded: false,
+  isFilmLoaded: false,
+  isCommentsLoaded: false,
   filteredFilmsCount: 0,
   displayedFilmsCount: FILMS_COUNT,
   authorizationStatus: AuthorizationStatus.UNKNOWN,
@@ -46,10 +49,17 @@ export const reducer = (state = initialState, action) => {
         promoFilm: action.payload,
         isPromoLoaded: true,
       };
+    case ActionType.LOAD_FILM:
+      return {
+        ...state,
+        film: action.payload,
+        isFilmLoaded: true,
+      };
     case ActionType.LOAD_COMMENTS:
       return {
         ...state,
         comments: action.payload,
+        isCommentsLoaded: true,
       };
     case ActionType.REQUIRED_AUTHORIZATION:
       return {

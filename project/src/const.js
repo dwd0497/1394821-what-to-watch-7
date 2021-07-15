@@ -2,9 +2,9 @@ export const AppRoute = {
   MAIN: '/',
   LOGIN: '/login',
   MY_LIST: '/mylist',
-  FILM: '/film',
-  ADD_REVIEW: '/dev-add-review',
+  FILMS: '/films',
   PLAYER: '/player',
+  NOT_FOUND: '/not_found',
 };
 
 export const Tabs = {

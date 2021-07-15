@@ -31,13 +31,13 @@ function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
           <Login />
         </Route>
         <PrivateRoute exact path={AppRoute.MY_LIST} render={() => <MyList />} />
-        <Route exact path={`${AppRoute.FILM}/:id`} component={Film} />
-        <PrivateRoute exact path={AppRoute.ADD_REVIEW} render={() => <AddReview />}/>
+        <Route exact path={`${AppRoute.FILMS}/:id`} component={Film} />
+        <PrivateRoute exact path={`${AppRoute.FILMS}/:id/review`} render={() => <AddReview />}/>
         <Route exact path={AppRoute.PLAYER}>
           <Player />
         </Route>
         <Route>
-          <NotFound />
+          <NotFound path={AppRoute.NOT_FOUND} />
         </Route>
       </Switch>
     </BrowserRouter>
