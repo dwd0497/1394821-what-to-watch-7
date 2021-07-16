@@ -9,18 +9,24 @@ import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 import FilmsTabs from '../../UI/film-tabs/film-tabs';
 
-import {AppRoute, TYPE_GENRE} from '../../../const';
+import {AppRoute, AuthorizationStatus} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 import {ActionCreator} from '../../../store/actions';
+import Loading from '../loading/loading';
+import {fetchComments, fetchFilm} from '../../../store/api-actions';
+import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
 
-function Film({films, changeActiveFilter, match}) {
-
+function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsLoaded, match, authorizationStatus}) {
+  const filmId = +match.params.id;
   useEffect(() => {
-    changeActiveFilter({type: TYPE_GENRE, value: film.genre});
+    loadFilm(filmId);
+    loadComments(filmId);
   }, []);
 
-  const film = films.find((item)=> item.id === +match.params.id);
+  if (!isFilmLoaded || !isCommentsLoaded) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -58,7 +64,10 @@ function Film({films, changeActiveFilter, match}) {
                   </svg>
                   <span>My list</span>
                 </button>
-                <Link to={AppRoute.ADD_REVIEW} className="btn film-card__button">Add review</Link>
+                {authorizationStatus === AuthorizationStatus.AUTH && (
+                  <Link to={`${AppRoute.FILMS}/${filmId}/review`} className="btn film-card__button">
+                    Add review
+                  </Link>)}
               </div>
             </div>
           </div>
@@ -71,7 +80,7 @@ function Film({films, changeActiveFilter, match}) {
             </div>
 
             <div className="film-card__desc">
-              <FilmsTabs film={film} />
+              <FilmsTabs film={film} comments={comments} />
             </div>
           </div>
         </div>
@@ -91,18 +100,39 @@ function Film({films, changeActiveFilter, match}) {
 }
 
 Film.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
-  changeActiveFilter: PropTypes.func.isRequired,
+  film: PropTypes.oneOfType([
+    filmCardProp.isRequired,
+    PropTypes.object.isRequired,
+  ]),
   match: PropTypes.object.isRequired,
+  loadFilm: PropTypes.func.isRequired,
+  isFilmLoaded: PropTypes.bool.isRequired,
+  comments:PropTypes.oneOfType([
+    PropTypes.arrayOf(filmCommentProp).isRequired,
+    PropTypes.array.isRequired,
+  ]) ,
+  loadComments: PropTypes.func.isRequired,
+  isCommentsLoaded: PropTypes.bool.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  films: state.films,
+  film: state.film,
+  comments: state.comments,
+  isFilmLoaded: state.isFilmLoaded,
+  authorizationStatus: state.authorizationStatus,
+  isCommentsLoaded: state.isCommentsLoaded,
 });
 
 const mapDispatchToState = (dispatch) => ({
   changeActiveFilter(filter) {
     dispatch(ActionCreator.changeActiveFilter(filter));
+  },
+  loadFilm(filmId) {
+    dispatch(fetchFilm(filmId));
+  },
+  loadComments(filmId) {
+    dispatch(fetchComments(filmId));
   },
 });
 

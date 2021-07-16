@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import browserHistory from '../../../browser-history';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
@@ -9,8 +10,21 @@ import {AppRoute} from '../../../const';
 
 import filmCardProp from '../../UI/film-card/film-card.prop';
 import {connect} from 'react-redux';
+import {fetchFilm} from '../../../store/api-actions';
+import PropTypes from 'prop-types';
+import Loading from '../loading/loading';
 
-function AddReview({film}) {
+function AddReview({film, loadFilm, isFilmLoaded}) {
+  const filmId = browserHistory.location.pathname.split('/')[2];
+
+  useEffect(() => {
+    loadFilm(filmId);
+  }, []);
+
+  if (!isFilmLoaded) {
+    return <Loading />;
+  }
+
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
@@ -26,10 +40,10 @@ function AddReview({film}) {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <Link to={AppRoute.FILM} className="breadcrumbs__link">{film.name}</Link>
+                <Link to={`${AppRoute.FILMS}/${filmId}`} className="breadcrumbs__link">{film.name}</Link>
               </li>
               <li className="breadcrumbs__item">
-                <Link to={AppRoute.ADD_REVIEW} className="breadcrumbs__link">Add review</Link>
+                <span className="breadcrumbs__link">Add review</span>
               </li>
             </ul>
           </nav>
@@ -51,12 +65,25 @@ function AddReview({film}) {
 }
 
 AddReview.propTypes = {
-  film: filmCardProp.isRequired,
+  film: PropTypes.oneOfType([
+    filmCardProp.isRequired,
+    PropTypes.object.isRequired,
+  ]),
+  loadFilm: PropTypes.func.isRequired,
+  isFilmLoaded: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  film: state.films[0],
+  film: state.film,
+  comments: state.comments,
+  isFilmLoaded: state.isFilmLoaded,
+});
+
+const mapDispatchToState = (dispatch) => ({
+  loadFilm(filmId) {
+    dispatch(fetchFilm(filmId));
+  },
 });
 
 export {AddReview};
-export default connect(mapStateToProps, null)(AddReview);
+export default connect(mapStateToProps, mapDispatchToState)(AddReview);

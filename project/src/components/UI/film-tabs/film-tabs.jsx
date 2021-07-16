@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import filmCardProp from '../film-card/film-card.prop';
@@ -7,8 +7,6 @@ import filmCommentProp from './film-comment.prop';
 import {Tabs} from '../../../const';
 
 import {convertMinutesToHours, formatDate} from '../../../utils/utils';
-import {fetchComments} from '../../../store/api-actions';
-import {connect} from 'react-redux';
 
 const getEvenElements = (elements) => elements.filter((element, id) => id % 2 === 0);
 
@@ -29,14 +27,10 @@ const getReviewTemplate = ({comment, user, date, rating, id}) => (
   </div>
 );
 
-function FilmTabs({film, comments, loadComments}) {
+function FilmTabs({film, comments}) {
   const {rating, scoresCount, description, director, starring, runTime, genre, released} = film;
 
   const [activTab, setActivTab] = useState(Tabs.OVERVIEW);
-
-  useEffect(() => {
-    loadComments(film.id);
-  }, []);
 
   return (
     <>
@@ -127,18 +121,6 @@ function FilmTabs({film, comments, loadComments}) {
 FilmTabs.propTypes = {
   film: filmCardProp.isRequired,
   comments: PropTypes.arrayOf(filmCommentProp).isRequired,
-  loadComments: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  comments: state.comments,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  loadComments(filmId) {
-    dispatch(fetchComments(filmId));
-  },
-});
-
-export {FilmTabs};
-export default connect(mapStateToProps, mapDispatchToState)(FilmTabs);
+export default FilmTabs;

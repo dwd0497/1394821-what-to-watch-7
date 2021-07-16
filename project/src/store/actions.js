@@ -4,9 +4,11 @@ export const ActionType = {
   SET_DISPLAYED_FILMS_COUNT: 'app/setDisplayedFilmsCount',
   LOAD_FILMS: 'data/loadFilms',
   LOAD_PROMO: 'data/loadPromo',
+  LOAD_FILM: 'data/loadFilm',
   LOAD_COMMENTS: 'data/loadComments',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   LOGOUT: 'user/logout',
+  REDIRECT_TO_ROUTE: 'app/redirectToRoure',
 };
 
 export const ActionCreator = {
@@ -30,6 +32,10 @@ export const ActionCreator = {
     type: ActionType.LOAD_PROMO,
     payload: film,
   }),
+  loadFilm: (film) => ({
+    type: ActionType.LOAD_FILM,
+    payload: film,
+  }),
   loadComments: (filmId) => ({
     type: ActionType.LOAD_COMMENTS,
     payload: filmId,
@@ -40,6 +46,10 @@ export const ActionCreator = {
   }),
   logout: () => ({
     type: ActionType.LOGOUT,
+  }),
+  redirectToRoure: (url) => ({
+    type: ActionType.REDIRECT_TO_ROUTE,
+    payload: url,
   }),
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Switch, Route, BrowserRouter} from 'react-router-dom';
+import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 
 import {AppRoute, AuthorizationStatus} from '../../const';
 
@@ -13,6 +13,8 @@ import AddReview from '../pages/add-review/add-review';
 import Player from '../pages/player/player';
 import NotFound from '../pages/not-found/not-found';
 import Loading from '../pages/loading/loading';
+import PrivateRoute from '../UI/private-route/private-route';
+import browserHistory from '../../browser-history';
 
 function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
   if (authorizationStatus === AuthorizationStatus.UNKNOWN || !isFilmsLoaded || !isPromoLoaded) {
@@ -20,7 +22,7 @@ function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.MAIN}>
           <Main />
@@ -28,19 +30,14 @@ function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
         <Route exact path={AppRoute.LOGIN}>
           <Login />
         </Route>
-        <Route exact path={AppRoute.MY_LIST}>
-          <MyList />
-        </Route>
-        <Route exact path={`${AppRoute.FILM}/:id`} component={Film}>
-        </Route>
-        <Route exact path={AppRoute.ADD_REVIEW}>
-          <AddReview />
-        </Route>
+        <PrivateRoute exact path={AppRoute.MY_LIST} render={() => <MyList />} />
+        <Route exact path={`${AppRoute.FILMS}/:id`} component={Film} />
+        <PrivateRoute exact path={`${AppRoute.FILMS}/:id/review`} render={() => <AddReview />}/>
         <Route exact path={AppRoute.PLAYER}>
           <Player />
         </Route>
         <Route>
-          <NotFound />
+          <NotFound path={AppRoute.NOT_FOUND} />
         </Route>
       </Switch>
     </BrowserRouter>
