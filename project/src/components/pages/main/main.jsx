@@ -13,9 +13,10 @@ import ShowMore from '../../UI/show-more/show-more';
 import {AppRoute, ALL_GENRES, TYPE_GENRE, FILMS_COUNT} from '../../../const';
 import {ActionCreator} from '../../../store/actions';
 import filmCardProp from '../../UI/film-card/film-card.prop';
+import MyListButton from '../../UI/my-list-button/my-list-button';
 
-function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
-  const {name, genre, released, backgroundImage, posterImage} = promoFilm;
+function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount, films }) {
+  const {name, genre, released, backgroundImage, posterImage, id, isFavorite} = promoFilm;
 
   useEffect(() => {
     changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
@@ -50,16 +51,11 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
               <div className="film-card__buttons">
                 <Link to={AppRoute.PLAYER} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
+                    <use xlinkHref="#play-s"/>
                   </svg>
                   <span>Play</span>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <MyListButton filmId={id} isFavorite={isFavorite} isPromo />
               </div>
             </div>
           </div>
@@ -72,7 +68,7 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
 
           <GenresList />
 
-          <FilmsList />
+          <FilmsList films={films}/>
 
           <ShowMore />
 
@@ -86,11 +82,13 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
 
 Main.propTypes = {
   promoFilm: filmCardProp.isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
   changeActiveFilter: PropTypes.func.isRequired,
   setDisplayedFilmsCount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  films: state.films,
   promoFilm: state.promoFilm,
 });
 

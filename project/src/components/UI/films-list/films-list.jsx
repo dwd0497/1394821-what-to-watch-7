@@ -9,9 +9,8 @@ import filmCardProp from '../film-card/film-card.prop';
 import {ALL_GENRES, TYPE_GENRE} from '../../../const';
 import {ActionCreator} from '../../../store/actions';
 
-
 function FilmsList({films, activeFilter, displayedFilmsCount, setFilteredFilmsCount}) {
-  const filterFilms = (allfilms, filter) => filter.type === TYPE_GENRE && filter.value === ALL_GENRES ? allfilms : allfilms.filter((film) => film[filter.type] === filter.value);
+  const filterFilms = (allFilms, filter) => filter.type === TYPE_GENRE && filter.value === ALL_GENRES ? allFilms : allFilms.filter((film) => film[filter.type] === filter.value);
   const filteredFilms = filterFilms(films, activeFilter);
 
   useEffect(() => {
@@ -41,7 +40,6 @@ FilmsList.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  films: state.films,
   activeFilter: state.activeFilter,
   displayedFilmsCount: state.displayedFilmsCount,
 });

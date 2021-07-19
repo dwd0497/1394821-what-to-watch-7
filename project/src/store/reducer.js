@@ -14,6 +14,10 @@ const initialState = {
   isPromoLoaded: false,
   isFilmLoaded: false,
   isCommentsLoaded: false,
+  similarFilms: [],
+  isSimilarFilmsLoaded: false,
+  favoriteFilms: [],
+  isFavoriteFilmsLoaded: false,
   filteredFilmsCount: 0,
   displayedFilmsCount: FILMS_COUNT,
   authorizationStatus: AuthorizationStatus.UNKNOWN,
@@ -43,6 +47,19 @@ export const reducer = (state = initialState, action) => {
         films: action.payload,
         isFilmsLoaded: true,
       };
+    case ActionType.LOAD_SIMILAR_FILMS:
+      return {
+        ...state,
+        similarFilms: action.payload,
+        isSimilarFilmsLoaded: true,
+      };
+    case ActionType.LOAD_FAVORITE_FILMS:
+      return {
+        ...state,
+        favoriteFilms: action.payload,
+        isFavoriteFilmsLoaded: true,
+      };
+
     case ActionType.LOAD_PROMO:
       return {
         ...state,
