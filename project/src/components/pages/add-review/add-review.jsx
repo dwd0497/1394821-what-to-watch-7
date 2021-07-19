@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 
 function AddReview({film, loadFilm, isFilmLoaded}) {
-  const filmId = browserHistory.location.pathname.split('/')[2];
+  const filmId = +browserHistory.location.pathname.split('/')[2];
 
   useEffect(() => {
     loadFilm(filmId);
@@ -57,7 +57,7 @@ function AddReview({film, loadFilm, isFilmLoaded}) {
       </div>
 
       <div className="add-review">
-        <AddReviewForm />
+        <AddReviewForm filmId={filmId} />
       </div>
 
     </section>

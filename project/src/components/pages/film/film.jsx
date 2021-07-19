@@ -14,17 +14,19 @@ import {AppRoute, AuthorizationStatus} from '../../../const';
 import filmCardProp from '../../UI/film-card/film-card.prop';
 import {ActionCreator} from '../../../store/actions';
 import Loading from '../loading/loading';
-import {fetchComments, fetchFilm} from '../../../store/api-actions';
+import {fetchComments, fetchFilm, fetchSimilarFilmsList} from '../../../store/api-actions';
 import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
+import MyListButton from '../../UI/my-list-button/my-list-button';
 
-function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsLoaded, match, authorizationStatus}) {
+function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsLoaded, match, authorizationStatus, isSimilarFilmsLoaded, loadSimilarFilms, similarFilms}) {
   const filmId = +match.params.id;
   useEffect(() => {
     loadFilm(filmId);
     loadComments(filmId);
+    loadSimilarFilms(filmId);
   }, []);
 
-  if (!isFilmLoaded || !isCommentsLoaded) {
+  if (!isFilmLoaded || !isCommentsLoaded || !isSimilarFilmsLoaded) {
     return <Loading />;
   }
 
@@ -58,12 +60,7 @@ function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsL
                   </svg>
                   <span>Play</span>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add" />
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <MyListButton filmId={filmId} isFavorite={film.isFavorite} />
                 {authorizationStatus === AuthorizationStatus.AUTH && (
                   <Link to={`${AppRoute.FILMS}/${filmId}/review`} className="btn film-card__button">
                     Add review
@@ -90,7 +87,7 @@ function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsL
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList />
+          <FilmsList films={similarFilms}/>
         </section>
 
         <Footer />
@@ -113,11 +110,16 @@ Film.propTypes = {
   ]) ,
   loadComments: PropTypes.func.isRequired,
   isCommentsLoaded: PropTypes.bool.isRequired,
+  isSimilarFilmsLoaded: PropTypes.bool.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
+  similarFilms: PropTypes.arrayOf(filmCardProp).isRequired,
+  loadSimilarFilms: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   film: state.film,
+  similarFilms: state.similarFilms,
+  isSimilarFilmsLoaded: state.isSimilarFilmsLoaded,
   comments: state.comments,
   isFilmLoaded: state.isFilmLoaded,
   authorizationStatus: state.authorizationStatus,
@@ -133,6 +135,9 @@ const mapDispatchToState = (dispatch) => ({
   },
   loadComments(filmId) {
     dispatch(fetchComments(filmId));
+  },
+  loadSimilarFilms(filmId) {
+    dispatch(fetchSimilarFilmsList(filmId));
   },
 });
 

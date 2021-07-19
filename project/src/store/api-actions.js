@@ -5,6 +5,18 @@ export const fetchFilmsList = () => (dispatch, _getState, api) => {
   api.get(APIRoute.FILMS).then(({data}) => dispatch(ActionCreator.loadFilms(adaptFilmsToClient(data))));
 };
 
+export const fetchSimilarFilmsList = (filmId) => (dispatch, _getState, api) => {
+  api.get(`${APIRoute.FILMS}/${filmId}/similar`).then(({data}) => dispatch(ActionCreator.loadSimilarFilms(adaptFilmsToClient(data))));
+};
+
+export const toggleFilmStatus = ({filmId, status}) => (dispatch, _getState, api) => {
+  api.post(`${APIRoute.FAVORITE}/${filmId}/${status}`).then(({data}) => dispatch(ActionCreator.loadFilm(adaptFilmToClient(data))));
+};
+
+export const fetchFavoriteFilms = () => (dispatch, _getState, api) => {
+  api.get(APIRoute.FAVORITE).then(({data}) => dispatch(ActionCreator.loadFavoriteFilms(adaptFilmsToClient(data))));
+};
+
 export const fetchPromoFilm = () => (dispatch, _getState, api) => {
   api.get(APIRoute.PROMO).then(({data}) => dispatch(ActionCreator.loadPromo(adaptFilmToClient(data))));
 };
@@ -42,6 +54,11 @@ export const logout = () => (dispatch, _getState, api) => {
       localStorage.removeItem('email');
     })
     .then(() => dispatch(ActionCreator.logout()));
+};
+
+export const addComment = ({filmId, comment, rating}) => (dispatch, _getState, api) => {
+  api.post(`${APIRoute.COMMENTS}/${filmId}`, {comment, rating})
+    .then(() => dispatch(ActionCreator.redirectToRoure(`${AppRoute.FILMS}/${filmId}`)));
 };
 
 const adaptFilmToClient = (film) => {

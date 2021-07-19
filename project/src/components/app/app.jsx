@@ -24,18 +24,12 @@ function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
   return (
     <BrowserRouter history={browserHistory}>
       <Switch>
-        <Route exact path={AppRoute.MAIN}>
-          <Main />
-        </Route>
-        <Route exact path={AppRoute.LOGIN}>
-          <Login />
-        </Route>
+        <Route exact path={AppRoute.MAIN} component={Main} />
+        <Route exact path={AppRoute.LOGIN} component={Login} />
         <PrivateRoute exact path={AppRoute.MY_LIST} render={() => <MyList />} />
         <Route exact path={`${AppRoute.FILMS}/:id`} component={Film} />
         <PrivateRoute exact path={`${AppRoute.FILMS}/:id/review`} render={() => <AddReview />}/>
-        <Route exact path={AppRoute.PLAYER}>
-          <Player />
-        </Route>
+        <Route exact path={AppRoute.PLAYER} component={Player} />
         <Route>
           <NotFound path={AppRoute.NOT_FOUND} />
         </Route>

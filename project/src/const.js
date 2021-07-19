@@ -23,8 +23,9 @@ export const APIRoute = {
   FILMS: '/films',
   PROMO: '/promo',
   COMMENTS: '/comments',
-  LOGIN: './login',
-  LOGOUT: './logout',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
+  FAVORITE: '/favorite',
 };
 
 // Временно уменьшил кол-во фильмов, чтоб тестить кнопку ShowMore, потом вернуть 20

@@ -3,6 +3,8 @@ export const ActionType = {
   SET_FILTERED_FILMS_COUNT: 'app/setFilteredFilmsCount',
   SET_DISPLAYED_FILMS_COUNT: 'app/setDisplayedFilmsCount',
   LOAD_FILMS: 'data/loadFilms',
+  LOAD_SIMILAR_FILMS: 'data/loadSimilarFilms',
+  LOAD_FAVORITE_FILMS: 'data/loadFavoriteFilms',
   LOAD_PROMO: 'data/loadPromo',
   LOAD_FILM: 'data/loadFilm',
   LOAD_COMMENTS: 'data/loadComments',
@@ -26,6 +28,14 @@ export const ActionCreator = {
   }),
   loadFilms: (films) => ({
     type: ActionType.LOAD_FILMS,
+    payload: films,
+  }),
+  loadSimilarFilms: (films) => ({
+    type: ActionType.LOAD_SIMILAR_FILMS,
+    payload: films,
+  }),
+  loadFavoriteFilms: (films) => ({
+    type: ActionType.LOAD_FAVORITE_FILMS,
     payload: films,
   }),
   loadPromo: (film) => ({
