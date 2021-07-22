@@ -1,22 +1,25 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 
-import {ActionCreator} from '../../../store/actions';
+import {changeActiveFilter} from '../../../store/actions';
 import {fetchFavoriteFilms} from '../../../store/api-actions';
-import filmCardProp from '../../UI/film-card/film-card.prop';
 import Loading from '../loading/loading';
+import {getFavoriteFilms, getIsFavoriteFilmsLoaded} from '../../../store/app-data/selectors';
 
-function MyList({changeActiveFilter, loadFavoriteFilms, favoriteFilms, isFavoriteFilmsLoaded}) {
+function MyList() {
+  const favoriteFilms = useSelector(getFavoriteFilms);
+  const isFavoriteFilmsLoaded = useSelector(getIsFavoriteFilmsLoaded);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    loadFavoriteFilms();
-    changeActiveFilter({type: 'isFavorite', value: true});
+    dispatch(changeActiveFilter({type: 'isFavorite', value: true}));
+    dispatch(fetchFavoriteFilms());
   }, []);
 
   if (!isFavoriteFilmsLoaded) {
@@ -41,26 +44,4 @@ function MyList({changeActiveFilter, loadFavoriteFilms, favoriteFilms, isFavorit
   );
 }
 
-MyList.propTypes = {
-  isFavoriteFilmsLoaded: PropTypes.bool.isRequired,
-  changeActiveFilter: PropTypes.func.isRequired,
-  loadFavoriteFilms: PropTypes.func.isRequired,
-  favoriteFilms: PropTypes.arrayOf(filmCardProp).isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  favoriteFilms: state.favoriteFilms,
-  isFavoriteFilmsLoaded: state.isFavoriteFilmsLoaded,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  changeActiveFilter(genre) {
-    dispatch(ActionCreator.changeActiveFilter(genre));
-  },
-  loadFavoriteFilms(filmId) {
-    dispatch(fetchFavoriteFilms(filmId));
-  },
-});
-
-export {MyList};
-export default connect(mapStateToProps, mapDispatchToState)(MyList);
+export default MyList;

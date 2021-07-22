@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 
 import {AppRoute, AuthorizationStatus} from '../../const';
@@ -15,8 +14,14 @@ import NotFound from '../pages/not-found/not-found';
 import Loading from '../pages/loading/loading';
 import PrivateRoute from '../UI/private-route/private-route';
 import browserHistory from '../../browser-history';
+import {getAuthorizationStatus} from '../../store/user/selectors';
+import {getIsFilmsLoaded, getIsPromoLoaded} from '../../store/app-data/selectors';
 
-function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
+function App() {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isFilmsLoaded = useSelector(getIsFilmsLoaded);
+  const isPromoLoaded = useSelector(getIsPromoLoaded);
+
   if (authorizationStatus === AuthorizationStatus.UNKNOWN || !isFilmsLoaded || !isPromoLoaded) {
     return <Loading />;
   }
@@ -38,17 +43,4 @@ function App({authorizationStatus, isFilmsLoaded, isPromoLoaded}) {
   );
 }
 
-App.propTypes = {
-  authorizationStatus: PropTypes.string.isRequired,
-  isFilmsLoaded: PropTypes.bool.isRequired,
-  isPromoLoaded: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
-  isFilmsLoaded: state.isFilmsLoaded,
-  isPromoLoaded: state.isPromoLoaded,
-});
-
-export {App};
-export default connect(mapStateToProps, null)(App);
+export default App;

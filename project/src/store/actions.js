@@ -1,3 +1,5 @@
+import {createAction} from '@reduxjs/toolkit';
+
 export const ActionType = {
   CHANGE_ACTIVE_FILTER: 'app/changeActiveFilter',
   SET_FILTERED_FILMS_COUNT: 'app/setFilteredFilmsCount',
@@ -13,53 +15,17 @@ export const ActionType = {
   REDIRECT_TO_ROUTE: 'app/redirectToRoure',
 };
 
-export const ActionCreator = {
-  changeActiveFilter: (filter) => ({
-    type: ActionType.CHANGE_ACTIVE_FILTER,
-    payload: filter,
-  }),
-  setFilteredFilmsCount: (count) => ({
-    type: ActionType.SET_FILTERED_FILMS_COUNT,
-    payload: count,
-  }),
-  setDisplayedFilmsCount: (count) => ({
-    type: ActionType.SET_DISPLAYED_FILMS_COUNT,
-    payload: count,
-  }),
-  loadFilms: (films) => ({
-    type: ActionType.LOAD_FILMS,
-    payload: films,
-  }),
-  loadSimilarFilms: (films) => ({
-    type: ActionType.LOAD_SIMILAR_FILMS,
-    payload: films,
-  }),
-  loadFavoriteFilms: (films) => ({
-    type: ActionType.LOAD_FAVORITE_FILMS,
-    payload: films,
-  }),
-  loadPromo: (film) => ({
-    type: ActionType.LOAD_PROMO,
-    payload: film,
-  }),
-  loadFilm: (film) => ({
-    type: ActionType.LOAD_FILM,
-    payload: film,
-  }),
-  loadComments: (filmId) => ({
-    type: ActionType.LOAD_COMMENTS,
-    payload: filmId,
-  }),
-  requireAuthorization: (status) => ({
-    type:ActionType.REQUIRED_AUTHORIZATION,
-    payload: status,
-  }),
-  logout: () => ({
-    type: ActionType.LOGOUT,
-  }),
-  redirectToRoure: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
-    payload: url,
-  }),
-};
+export const changeActiveFilter = createAction(ActionType.CHANGE_ACTIVE_FILTER, (filter) => ({payload: filter}));
+export const setFilteredFilmsCount = createAction(ActionType.SET_FILTERED_FILMS_COUNT, (count) => ({payload: count}));
+export const setDisplayedFilmsCount = createAction(ActionType.SET_DISPLAYED_FILMS_COUNT, (count) => ({payload: count}));
+export const loadFilms = createAction(ActionType.LOAD_FILMS, (films) => ({payload: films}));
+export const loadSimilarFilms = createAction(ActionType.LOAD_SIMILAR_FILMS, (films) => ({payload: films}));
+export const loadFavoriteFilms = createAction(ActionType.LOAD_FAVORITE_FILMS, (films) => ({payload: films}));
+export const loadPromo = createAction(ActionType.LOAD_PROMO, (film) => ({payload: film}));
+export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({payload: film}));
+export const loadComments = createAction(ActionType.LOAD_COMMENTS, (filmId) => ({payload: filmId}));
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({payload: status}));
+export const logout = createAction(ActionType.LOGOUT);
+export const redirectToRoure = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({payload: url}));
+
 

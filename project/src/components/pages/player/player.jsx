@@ -1,10 +1,10 @@
 import React from 'react';
+import {getPromoFilm} from '../../../store/app-data/selectors';
+import {useSelector} from 'react-redux';
 
-import filmCardProp from '../../UI/film-card/film-card.prop';
-import {connect} from 'react-redux';
-import {AddReview} from '../add-review/add-review';
+function Player() {
+  const promoFilm = useSelector(getPromoFilm);
 
-function Player({promoFilm}) {
   return (
     <div className="player">
       <video src={promoFilm.videoLink} className="player__video" poster={promoFilm.posterImage}/>
@@ -41,13 +41,4 @@ function Player({promoFilm}) {
   );
 }
 
-Player.propTypes = {
-  promoFilm: filmCardProp.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  promoFilm: state.promoFilm,
-});
-
-export {AddReview};
-export default connect(mapStateToProps, null)(Player);
+export default Player;

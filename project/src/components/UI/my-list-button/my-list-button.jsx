@@ -1,14 +1,16 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+
 import {toggleFilmStatus} from '../../../store/api-actions';
 
-function MyListButton({filmId, isFavorite, changeFilmStatus, isPromo}) {
+function MyListButton({filmId, isFavorite, isPromo = false}) {
+  const dispatch = useDispatch();
 
   const onMyListClick = (evt) => {
     evt.preventDefault();
     const status = isFavorite ? 0 : 1;
-    changeFilmStatus({filmId, status, isPromo});
+    dispatch(toggleFilmStatus({filmId, status, isPromo}));
   };
 
   return (
@@ -30,15 +32,7 @@ function MyListButton({filmId, isFavorite, changeFilmStatus, isPromo}) {
 MyListButton.propTypes = {
   isFavorite: PropTypes.bool.isRequired,
   filmId: PropTypes.number.isRequired,
-  changeFilmStatus: PropTypes.func.isRequired,
-  isPromo: PropTypes.bool.isRequired,
+  isPromo: PropTypes.bool,
 };
 
-const mapDispatchToState = (dispatch) => ({
-  changeFilmStatus(filmData) {
-    dispatch(toggleFilmStatus(filmData));
-  },
-});
-
-export {MyListButton};
-export default connect(null, mapDispatchToState)(MyListButton);
+export default MyListButton;

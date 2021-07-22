@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+
 import {addComment} from '../../../store/api-actions';
 
 const MAX_RATING = 10;
 const MIN_MESSAGE_LENGTH = 40;
 const MAX_MESSAGE_LENGTH = 400;
 
-
-function AddReviewForm({filmId, addNewComment}) {
+function AddReviewForm({filmId}) {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(null);
   const [isFormValid, setIsFormValid] = useState(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsFormValid(rating && comment.length >= MIN_MESSAGE_LENGTH && comment.length <= MAX_MESSAGE_LENGTH);
@@ -21,7 +23,7 @@ function AddReviewForm({filmId, addNewComment}) {
     evt.preventDefault();
 
     if (isFormValid) {
-      addNewComment({filmId, comment, rating});
+      dispatch(addComment({filmId, comment, rating}));
     }
   };
 
@@ -51,14 +53,6 @@ function AddReviewForm({filmId, addNewComment}) {
 
 AddReviewForm.propTypes = {
   filmId: PropTypes.number.isRequired,
-  addNewComment: PropTypes.func.isRequired,
 };
 
-const mapDispatchToState = (dispatch) => ({
-  addNewComment(commentData) {
-    dispatch(addComment(commentData));
-  },
-});
-
-export {AddReviewForm};
-export default connect(null, mapDispatchToState)(AddReviewForm);
+export default AddReviewForm;

@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
@@ -11,16 +10,20 @@ import GenresList from '../../UI/genres-list/genres-list';
 import ShowMore from '../../UI/show-more/show-more';
 
 import {AppRoute, ALL_GENRES, TYPE_GENRE, FILMS_COUNT} from '../../../const';
-import {ActionCreator} from '../../../store/actions';
-import filmCardProp from '../../UI/film-card/film-card.prop';
+import {changeActiveFilter, setDisplayedFilmsCount} from '../../../store/actions';
 import MyListButton from '../../UI/my-list-button/my-list-button';
+import {getFilms, getPromoFilm} from '../../../store/app-data/selectors';
 
-function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount, films }) {
+function Main() {
+  const films = useSelector(getFilms);
+  const promoFilm = useSelector(getPromoFilm);
   const {name, genre, released, backgroundImage, posterImage, id, isFavorite} = promoFilm;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
-    setDisplayedFilmsCount(FILMS_COUNT);
+    dispatch(changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES}));
+    dispatch(setDisplayedFilmsCount(FILMS_COUNT));
   }, []);
 
   return (
@@ -80,27 +83,5 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount, films }) {
   );
 }
 
-Main.propTypes = {
-  promoFilm: filmCardProp.isRequired,
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
-  changeActiveFilter: PropTypes.func.isRequired,
-  setDisplayedFilmsCount: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  films: state.films,
-  promoFilm: state.promoFilm,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  },
-  setDisplayedFilmsCount(count) {
-    dispatch(ActionCreator.setDisplayedFilmsCount(count));
-  },
-});
-
-export {Main};
-export default connect(mapStateToProps, mapDispatchToState)(Main);
+export default Main;
 

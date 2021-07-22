@@ -1,19 +1,23 @@
 import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
 import {AppRoute, AuthorizationStatus} from '../../../const';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import {logout} from '../../../store/api-actions';
 import browserHistory from '../../../browser-history';
+import {getAuthorizationStatus} from '../../../store/user/selectors';
 
-function User({authorizationStatus, logoutUser}) {
+function User() {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  const dispatch = useDispatch();
+
   const isUserAuthorized = authorizationStatus === AuthorizationStatus.AUTH;
   const userEmail = localStorage.getItem('email');
 
   const onSignClick = (evt) => {
     evt.preventDefault();
-    isUserAuthorized ? logoutUser() : browserHistory.push(AppRoute.LOGIN);
+    isUserAuthorized ? dispatch(logout()) : browserHistory.push(AppRoute.LOGIN);
   };
 
   return (
@@ -37,20 +41,4 @@ function User({authorizationStatus, logoutUser}) {
   );
 }
 
-User.propTypes = {
-  authorizationStatus: PropTypes.string.isRequired,
-  logoutUser: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  logoutUser() {
-    dispatch(logout());
-  },
-});
-
-export {User};
-export default connect(mapStateToProps, mapDispatchToState)(User);
+export default User;
