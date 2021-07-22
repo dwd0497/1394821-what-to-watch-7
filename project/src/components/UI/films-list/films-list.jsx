@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
@@ -11,15 +11,16 @@ import {ActionCreator} from '../../../store/actions';
 
 function FilmsList({films, activeFilter, displayedFilmsCount, setFilteredFilmsCount}) {
   const filterFilms = (allFilms, filter) => filter.type === TYPE_GENRE && filter.value === ALL_GENRES ? allFilms : allFilms.filter((film) => film[filter.type] === filter.value);
-  const filteredFilms = filterFilms(films, activeFilter);
+
+  const memoizedFilteredFilms = useMemo(() => filterFilms(films, activeFilter), [activeFilter.value]);
 
   useEffect(() => {
-    setFilteredFilmsCount(filteredFilms.length);
+    setFilteredFilmsCount(memoizedFilteredFilms.length);
   }, [films, activeFilter]);
 
   return (
     <div className="catalog__films-list">
-      {filteredFilms.slice(0, displayedFilmsCount).map((film) => (
+      {memoizedFilteredFilms.slice(0, displayedFilmsCount).map((film) => (
         <FilmCard
           key={film.id}
           film={film}
