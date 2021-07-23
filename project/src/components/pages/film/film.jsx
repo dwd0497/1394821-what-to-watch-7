@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
@@ -11,20 +11,38 @@ import FilmsTabs from '../../UI/film-tabs/film-tabs';
 
 import {AppRoute, AuthorizationStatus} from '../../../const';
 
-import filmCardProp from '../../UI/film-card/film-card.prop';
-import {ActionCreator} from '../../../store/actions';
 import Loading from '../loading/loading';
-import {fetchComments, fetchFilm} from '../../../store/api-actions';
-import filmCommentProp from '../../UI/film-tabs/film-comment.prop';
+import {fetchComments, fetchFilm, fetchSimilarFilmsList} from '../../../store/api-actions';
+import MyListButton from '../../UI/my-list-button/my-list-button';
+import {
+  getComments,
+  getFilm, getIsCommentsLoaded,
+  getIsFilmLoaded,
+  getIsSimilarFilmsLoaded,
+  getSimilarFilms
+} from '../../../store/app-data/selectors';
+import {getAuthorizationStatus} from '../../../store/user/selectors';
 
-function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsLoaded, match, authorizationStatus}) {
+function Film({match}) {
+  const film = useSelector(getFilm);
+  const isFilmLoaded = useSelector(getIsFilmLoaded);
+  const similarFilms = useSelector(getSimilarFilms);
+  const isSimilarFilmsLoaded = useSelector(getIsSimilarFilmsLoaded);
+  const comments = useSelector(getComments);
+  const isCommentsLoaded = useSelector(getIsCommentsLoaded);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
+  const dispatch = useDispatch();
+
   const filmId = +match.params.id;
+
   useEffect(() => {
-    loadFilm(filmId);
-    loadComments(filmId);
+    dispatch(fetchFilm(filmId));
+    dispatch(fetchComments(filmId));
+    dispatch(fetchSimilarFilmsList(filmId));
   }, []);
 
-  if (!isFilmLoaded || !isCommentsLoaded) {
+  if (!isFilmLoaded || !isCommentsLoaded || !isSimilarFilmsLoaded) {
     return <Loading />;
   }
 
@@ -58,12 +76,7 @@ function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsL
                   </svg>
                   <span>Play</span>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add" />
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <MyListButton filmId={filmId} isFavorite={film.isFavorite} />
                 {authorizationStatus === AuthorizationStatus.AUTH && (
                   <Link to={`${AppRoute.FILMS}/${filmId}/review`} className="btn film-card__button">
                     Add review
@@ -90,7 +103,7 @@ function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsL
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList />
+          <FilmsList films={similarFilms}/>
         </section>
 
         <Footer />
@@ -100,41 +113,7 @@ function Film({film, loadFilm, isFilmLoaded, comments, loadComments, isCommentsL
 }
 
 Film.propTypes = {
-  film: PropTypes.oneOfType([
-    filmCardProp.isRequired,
-    PropTypes.object.isRequired,
-  ]),
   match: PropTypes.object.isRequired,
-  loadFilm: PropTypes.func.isRequired,
-  isFilmLoaded: PropTypes.bool.isRequired,
-  comments:PropTypes.oneOfType([
-    PropTypes.arrayOf(filmCommentProp).isRequired,
-    PropTypes.array.isRequired,
-  ]) ,
-  loadComments: PropTypes.func.isRequired,
-  isCommentsLoaded: PropTypes.bool.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  film: state.film,
-  comments: state.comments,
-  isFilmLoaded: state.isFilmLoaded,
-  authorizationStatus: state.authorizationStatus,
-  isCommentsLoaded: state.isCommentsLoaded,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  },
-  loadFilm(filmId) {
-    dispatch(fetchFilm(filmId));
-  },
-  loadComments(filmId) {
-    dispatch(fetchComments(filmId));
-  },
-});
-
-export {Film};
-export default connect(mapStateToProps, mapDispatchToState)(Film);
+export default Film;

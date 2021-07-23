@@ -5,20 +5,23 @@ import browserHistory from '../../../browser-history';
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import AddReviewForm from '../../UI/add-review-form/add-review-form';
-
-import {AppRoute} from '../../../const';
-
-import filmCardProp from '../../UI/film-card/film-card.prop';
-import {connect} from 'react-redux';
-import {fetchFilm} from '../../../store/api-actions';
-import PropTypes from 'prop-types';
 import Loading from '../loading/loading';
 
-function AddReview({film, loadFilm, isFilmLoaded}) {
-  const filmId = browserHistory.location.pathname.split('/')[2];
+import {AppRoute} from '../../../const';
+import {fetchFilm} from '../../../store/api-actions';
+import {getFilm, getIsFilmLoaded} from '../../../store/app-data/selectors';
+import {useDispatch, useSelector} from 'react-redux';
+
+function AddReview() {
+  const filmId = +browserHistory.location.pathname.split('/')[2];
+
+  const film = useSelector(getFilm);
+  const isFilmLoaded = useSelector(getIsFilmLoaded);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    loadFilm(filmId);
+    dispatch(fetchFilm(filmId));
   }, []);
 
   if (!isFilmLoaded) {
@@ -57,33 +60,11 @@ function AddReview({film, loadFilm, isFilmLoaded}) {
       </div>
 
       <div className="add-review">
-        <AddReviewForm />
+        <AddReviewForm filmId={filmId} />
       </div>
 
     </section>
   );
 }
 
-AddReview.propTypes = {
-  film: PropTypes.oneOfType([
-    filmCardProp.isRequired,
-    PropTypes.object.isRequired,
-  ]),
-  loadFilm: PropTypes.func.isRequired,
-  isFilmLoaded: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  film: state.film,
-  comments: state.comments,
-  isFilmLoaded: state.isFilmLoaded,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  loadFilm(filmId) {
-    dispatch(fetchFilm(filmId));
-  },
-});
-
-export {AddReview};
-export default connect(mapStateToProps, mapDispatchToState)(AddReview);
+export default AddReview;

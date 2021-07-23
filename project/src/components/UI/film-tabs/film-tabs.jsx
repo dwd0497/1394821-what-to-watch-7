@@ -30,21 +30,21 @@ const getReviewTemplate = ({comment, user, date, rating, id}) => (
 function FilmTabs({film, comments}) {
   const {rating, scoresCount, description, director, starring, runTime, genre, released} = film;
 
-  const [activTab, setActivTab] = useState(Tabs.OVERVIEW);
+  const [activeTab, setActiveTab] = useState(Tabs.OVERVIEW);
 
   return (
     <>
       <nav className="film-nav film-card__nav">
         <ul className="film-nav__list">
           {Object.values(Tabs).map((tab) => (
-            <li key={tab} onClick={() => setActivTab(tab)} className={activTab === tab ? 'film-nav__item film-nav__item--active' : 'film-nav__item'}>
+            <li key={tab} onClick={() => setActiveTab(tab)} className={activeTab === tab ? 'film-nav__item film-nav__item--active' : 'film-nav__item'}>
               <span className="film-nav__link">{tab}</span>
             </li>
           ))}
         </ul>
       </nav>
 
-      {activTab === Tabs.OVERVIEW &&
+      {activeTab === Tabs.OVERVIEW &&
         <>
           <div className="film-rating">
             <div className="film-rating__score">{rating}</div>
@@ -64,7 +64,7 @@ function FilmTabs({film, comments}) {
           </div>
         </>}
 
-      {activTab === Tabs.DETAILS &&
+      {activeTab === Tabs.DETAILS &&
         <div className="film-card__text film-card__row">
           <div className="film-card__text-col">
             <p className="film-card__details-item">
@@ -97,7 +97,7 @@ function FilmTabs({film, comments}) {
           </div>
         </div>}
 
-      {activTab === Tabs.REVIEWS &&
+      {activeTab === Tabs.REVIEWS &&
         <div className="film-card__reviews film-card__row">
           {comments.length &&
             <>

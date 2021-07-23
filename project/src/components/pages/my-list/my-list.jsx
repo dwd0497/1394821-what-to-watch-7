@@ -1,19 +1,30 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
 import Footer from '../../UI/footer/footer';
 import FilmsList from '../../UI/films-list/films-list';
 
-import {ActionCreator} from '../../../store/actions';
+import {changeActiveFilter} from '../../../store/actions';
+import {fetchFavoriteFilms} from '../../../store/api-actions';
+import Loading from '../loading/loading';
+import {getFavoriteFilms, getIsFavoriteFilmsLoaded} from '../../../store/app-data/selectors';
 
-function MyList({changeActiveFilter}) {
+function MyList() {
+  const favoriteFilms = useSelector(getFavoriteFilms);
+  const isFavoriteFilmsLoaded = useSelector(getIsFavoriteFilmsLoaded);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    changeActiveFilter({type: 'isFavorite', value: true});
+    dispatch(changeActiveFilter({type: 'isFavorite', value: true}));
+    dispatch(fetchFavoriteFilms());
   }, []);
+
+  if (!isFavoriteFilmsLoaded) {
+    return <Loading />;
+  }
 
   return (
     <div className="user-page">
@@ -25,7 +36,7 @@ function MyList({changeActiveFilter}) {
 
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
-        <FilmsList />
+        <FilmsList films={favoriteFilms} />
       </section>
 
       <Footer />
@@ -33,15 +44,4 @@ function MyList({changeActiveFilter}) {
   );
 }
 
-MyList.propTypes = {
-  changeActiveFilter: PropTypes.func.isRequired,
-};
-
-const mapDispatchToState = (dispatch) => ({
-  changeActiveFilter(genre) {
-    dispatch(ActionCreator.changeActiveFilter(genre));
-  },
-});
-
-export {MyList};
-export default connect(null, mapDispatchToState)(MyList);
+export default MyList;

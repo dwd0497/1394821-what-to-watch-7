@@ -1,22 +1,23 @@
 import React, {useRef} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import Footer from '../../UI/footer/footer';
 import {login} from '../../../store/api-actions';
 
-function Login({onSubmit}) {
+function Login() {
   const loginRef = useRef();
   const passwordRef = useRef();
 
-  const hendleSubmit = (evt) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    onSubmit({
+    dispatch(login({
       login: loginRef.current.value,
       password: loginRef.current.value,
-    });
+    }));
   };
 
   return (
@@ -28,7 +29,7 @@ function Login({onSubmit}) {
       </header>
 
       <div className="sign-in user-page__content">
-        <form action="#" className="sign-in__form" onSubmit={hendleSubmit}>
+        <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" ref={loginRef} />
@@ -50,15 +51,4 @@ function Login({onSubmit}) {
   );
 }
 
-Login.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(authData) {
-    dispatch(login(authData));
-  },
-});
-
-export {Login};
-export default connect(null, mapDispatchToProps)(Login);
+export default Login;

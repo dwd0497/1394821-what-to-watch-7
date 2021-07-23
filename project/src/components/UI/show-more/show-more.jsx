@@ -1,10 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {ActionCreator} from '../../../store/actions';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import {FILMS_COUNT_STEP} from '../../../const';
+import {useDispatch, useSelector} from 'react-redux';
 
-function ShowMore({displayedFilmsCount, setDisplayedFilmsCount, filteredFilmsCount}) {
+import {setDisplayedFilmsCount} from '../../../store/actions';
+import {FILMS_COUNT_STEP} from '../../../const';
+import {getDisplayedFilmsCount, getFilteredFilmsCount} from '../../../store/app-process/selectors';
+
+function ShowMore() {
+  const displayedFilmsCount = useSelector(getDisplayedFilmsCount);
+  const filteredFilmsCount = useSelector(getFilteredFilmsCount);
+
+  const dispatch = useDispatch();
+
   const [isShowMoreRender, setIsShowMoreRender] = useState(true);
 
   useEffect(() => {
@@ -12,9 +18,7 @@ function ShowMore({displayedFilmsCount, setDisplayedFilmsCount, filteredFilmsCou
   }, [displayedFilmsCount, filteredFilmsCount]);
 
   const onShowMoreClick = () => {
-    if (displayedFilmsCount < filteredFilmsCount) {
-      setDisplayedFilmsCount(displayedFilmsCount + FILMS_COUNT_STEP);
-    }
+    dispatch(setDisplayedFilmsCount(displayedFilmsCount + FILMS_COUNT_STEP));
   };
 
   return (
@@ -28,22 +32,4 @@ function ShowMore({displayedFilmsCount, setDisplayedFilmsCount, filteredFilmsCou
   );
 }
 
-ShowMore.propTypes = {
-  displayedFilmsCount: PropTypes.number.isRequired,
-  filteredFilmsCount: PropTypes.number.isRequired,
-  setDisplayedFilmsCount: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  displayedFilmsCount: state.displayedFilmsCount,
-  filteredFilmsCount: state. filteredFilmsCount,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  setDisplayedFilmsCount(count) {
-    dispatch(ActionCreator.setDisplayedFilmsCount(count));
-  },
-});
-
-export {ShowMore};
-export default connect(mapStateToProps, mapDispatchToState)(ShowMore);
+export default ShowMore;

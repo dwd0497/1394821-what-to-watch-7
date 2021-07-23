@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import User from '../../UI/user/user';
@@ -11,15 +10,20 @@ import GenresList from '../../UI/genres-list/genres-list';
 import ShowMore from '../../UI/show-more/show-more';
 
 import {AppRoute, ALL_GENRES, TYPE_GENRE, FILMS_COUNT} from '../../../const';
-import {ActionCreator} from '../../../store/actions';
-import filmCardProp from '../../UI/film-card/film-card.prop';
+import {changeActiveFilter, setDisplayedFilmsCount} from '../../../store/actions';
+import MyListButton from '../../UI/my-list-button/my-list-button';
+import {getFilms, getPromoFilm} from '../../../store/app-data/selectors';
 
-function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
-  const {name, genre, released, backgroundImage, posterImage} = promoFilm;
+function Main() {
+  const films = useSelector(getFilms);
+  const promoFilm = useSelector(getPromoFilm);
+  const {name, genre, released, backgroundImage, posterImage, id, isFavorite} = promoFilm;
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES});
-    setDisplayedFilmsCount(FILMS_COUNT);
+    dispatch(changeActiveFilter({type: TYPE_GENRE, value: ALL_GENRES}));
+    dispatch(setDisplayedFilmsCount(FILMS_COUNT));
   }, []);
 
   return (
@@ -50,16 +54,11 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
               <div className="film-card__buttons">
                 <Link to={AppRoute.PLAYER} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
+                    <use xlinkHref="#play-s"/>
                   </svg>
                   <span>Play</span>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <MyListButton filmId={id} isFavorite={isFavorite} isPromo />
               </div>
             </div>
           </div>
@@ -72,7 +71,7 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
 
           <GenresList />
 
-          <FilmsList />
+          <FilmsList films={films}/>
 
           <ShowMore />
 
@@ -84,25 +83,5 @@ function Main({promoFilm, changeActiveFilter, setDisplayedFilmsCount}) {
   );
 }
 
-Main.propTypes = {
-  promoFilm: filmCardProp.isRequired,
-  changeActiveFilter: PropTypes.func.isRequired,
-  setDisplayedFilmsCount: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  promoFilm: state.promoFilm,
-});
-
-const mapDispatchToState = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  },
-  setDisplayedFilmsCount(count) {
-    dispatch(ActionCreator.setDisplayedFilmsCount(count));
-  },
-});
-
-export {Main};
-export default connect(mapStateToProps, mapDispatchToState)(Main);
+export default Main;
 
