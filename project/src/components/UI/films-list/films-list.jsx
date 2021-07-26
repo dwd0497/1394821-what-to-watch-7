@@ -17,7 +17,7 @@ function FilmsList({films}) {
 
   const filterFilms = (allFilms, filter) => filter.type === TYPE_GENRE && filter.value === ALL_GENRES ? allFilms : allFilms.filter((film) => film[filter.type] === filter.value);
 
-  const memoizedFilteredFilms = useMemo(() => filterFilms(films, activeFilter), [activeFilter.value]);
+  const memoizedFilteredFilms = useMemo(() => filterFilms(films, activeFilter), [films, activeFilter.value]);
 
   useEffect(() => {
     dispatch(setFilteredFilmsCount(memoizedFilteredFilms.length));
