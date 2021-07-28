@@ -30,7 +30,7 @@ function User() {
             </Link>)}
         </div>
       </li>
-      {userEmail && (
+      {userEmail && isUserAuthorized && (
         <li className="user-block__item">
           {userEmail}
         </li>)}

@@ -34,7 +34,7 @@ function App() {
         <PrivateRoute exact path={AppRoute.MY_LIST} render={() => <MyList />} />
         <Route exact path={`${AppRoute.FILMS}/:id`} component={Film} />
         <PrivateRoute exact path={`${AppRoute.FILMS}/:id/review`} render={() => <AddReview />}/>
-        <Route exact path={AppRoute.PLAYER} component={Player} />
+        <Route exact path={`${AppRoute.PLAYER}/:id`} component={Player} />
         <Route>
           <NotFound path={AppRoute.NOT_FOUND} />
         </Route>
