@@ -10,6 +10,7 @@ import {changeActiveFilter} from '../../../store/actions';
 import {fetchFavoriteFilms} from '../../../store/api-actions';
 import Loading from '../loading/loading';
 import {getFavoriteFilms, getIsFavoriteFilmsLoaded} from '../../../store/app-data/selectors';
+import {TYPE_FAVORITE} from '../../../const';
 
 function MyList() {
   const favoriteFilms = useSelector(getFavoriteFilms);
@@ -18,7 +19,7 @@ function MyList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(changeActiveFilter({type: 'isFavorite', value: true}));
+    dispatch(changeActiveFilter({type: TYPE_FAVORITE, value: true}));
     dispatch(fetchFavoriteFilms());
   }, []);
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '../../UI/logo/logo';
 
-function User() {
+function Footer() {
   return (
     <footer className="page-footer">
       <div className="logo">
@@ -15,4 +15,4 @@ function User() {
   );
 }
 
-export default User;
+export default Footer;

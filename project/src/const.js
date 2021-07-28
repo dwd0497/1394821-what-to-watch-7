@@ -33,3 +33,4 @@ export const FILMS_COUNT = 8;
 export const FILMS_COUNT_STEP = 8;
 export const ALL_GENRES = 'All genres';
 export const TYPE_GENRE = 'genre';
+export const TYPE_FAVORITE = 'isFavorite';
