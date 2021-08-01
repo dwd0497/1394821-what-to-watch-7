@@ -61,6 +61,7 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     .then(({data}) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('email', data.email);
+      api.defaults.headers = {'x-token': data.token};
     })
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
     .then(() => dispatch(redirectToRoure(AppRoute.MAIN)))
@@ -71,6 +72,7 @@ export const logout = () => (dispatch, _getState, api) => (
     .then(() => {
       localStorage.removeItem('token');
       localStorage.removeItem('email');
+      api.defaults.headers = {'x-token': ''};
     })
     .then(() => dispatch(closeSession()))
 );

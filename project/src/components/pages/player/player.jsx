@@ -9,6 +9,7 @@ function Player({match, history}) {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [togglerPosition, setTogglerPosition] = useState(0);
   const [isFilmLoaded, setIsFilmLoaded] = useState(false);
 
   const videoRef = useRef();
@@ -29,13 +30,29 @@ function Player({match, history}) {
 
   useEffect(() => {
     videoRef.current.onloadeddata = () => {
-      setIsFilmLoaded(true);
-      setTimeElapsed(videoRef.current.duration);
+      if (videoRef.current) {
+        setIsFilmLoaded(true);
+        setTimeElapsed(videoRef.current.duration);
+      }
     };
     videoRef.current.ontimeupdate = () => {
-      setTimeElapsed(videoRef.current.duration - videoRef.current.currentTime);
+      if (videoRef.current) {
+        setTimeElapsed(videoRef.current.duration - videoRef.current.currentTime);
+      }
+    };
+
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.onloadeddata = null;
+        videoRef.current.ontimeupdate = null;
+        videoRef.current = null;
+      }
     };
   }, []);
+
+  useEffect(() => {
+    setTogglerPosition(videoRef.current.currentTime/videoRef.current.duration*100);
+  }, [timeElapsed]);
 
 
   useEffect(() => {
@@ -53,7 +70,7 @@ function Player({match, history}) {
         <div className="player__controls-row">
           <div className="player__time">
             <progress className="player__progress" value="30" max="100"/>
-            <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
+            <div className="player__toggler" style={{left: `${togglerPosition}%`}}>Toggler</div>
           </div>
           <div className="player__time-value">-{formatTime(timeElapsed)}</div>
         </div>
