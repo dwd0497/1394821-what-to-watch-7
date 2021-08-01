@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
@@ -23,7 +22,7 @@ import {
 } from '../../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../../store/user/selectors';
 
-function Film({match}) {
+function Film() {
   const film = useSelector(getFilm);
   const isFilmLoaded = useSelector(getIsFilmLoaded);
   const similarFilms = useSelector(getSimilarFilms);
@@ -34,13 +33,13 @@ function Film({match}) {
 
   const dispatch = useDispatch();
 
-  const filmId = +match.params.id;
+  const {id} = useParams();
 
   useEffect(() => {
-    dispatch(fetchFilm(filmId));
-    dispatch(fetchComments(filmId));
-    dispatch(fetchSimilarFilmsList(filmId));
-  }, []);
+    dispatch(fetchFilm(id));
+    dispatch(fetchComments(id));
+    dispatch(fetchSimilarFilmsList(id));
+  }, [id]);
 
   if (!isFilmLoaded || !isCommentsLoaded || !isSimilarFilmsLoaded) {
     return <Loading />;
@@ -70,15 +69,15 @@ function Film({match}) {
               </p>
 
               <div className="film-card__buttons">
-                <Link to={`${AppRoute.PLAYER}/${filmId}`} className="btn btn--play film-card__button">
+                <Link to={`${AppRoute.PLAYER}/${id}`} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s" />
                   </svg>
                   <span>Play</span>
                 </Link>
-                <MyListButton filmId={filmId} isFavorite={film.isFavorite} />
+                <MyListButton filmId={+id} isFavorite={film.isFavorite} />
                 {authorizationStatus === AuthorizationStatus.AUTH && (
-                  <Link to={`${AppRoute.FILMS}/${filmId}/review`} className="btn film-card__button">
+                  <Link to={`${AppRoute.FILMS}/${id}/review`} className="btn film-card__button">
                     Add review
                   </Link>)}
               </div>
@@ -111,9 +110,5 @@ function Film({match}) {
     </>
   );
 }
-
-Film.propTypes = {
-  match: PropTypes.object.isRequired,
-};
 
 export default Film;

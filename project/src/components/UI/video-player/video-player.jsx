@@ -2,14 +2,11 @@ import React, {useEffect, useRef} from 'react';
 
 import PropTypes from 'prop-types';
 
-
 function VideoPlayer({isPlaying, previewVideoLink, posterImage}) {
 
   const videoRef = useRef();
 
   useEffect(() => {
-    videoRef.current.muted = true;
-
     if (isPlaying) {
       videoRef.current.play();
     } else {
@@ -18,7 +15,7 @@ function VideoPlayer({isPlaying, previewVideoLink, posterImage}) {
   }, [isPlaying]);
 
   return (
-    <video src={previewVideoLink} className="player__video" poster={posterImage} ref={videoRef} />
+    <video src={previewVideoLink} muted className="player__video" poster={posterImage} ref={videoRef} />
   );
 }
 

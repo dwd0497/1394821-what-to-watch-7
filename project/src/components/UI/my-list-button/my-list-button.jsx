@@ -1,16 +1,24 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {toggleFilmStatus} from '../../../store/api-actions';
+import {getAuthorizationStatus} from '../../../store/user/selectors';
+import {AppRoute, AuthorizationStatus} from '../../../const';
+import {redirectToRoure} from '../../../store/actions';
 
 function MyListButton({filmId, isFavorite, isPromo = false}) {
   const dispatch = useDispatch();
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const onMyListClick = (evt) => {
     evt.preventDefault();
-    const status = isFavorite ? 0 : 1;
-    dispatch(toggleFilmStatus({filmId, status, isPromo}));
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      const status = isFavorite ? 0 : 1;
+      dispatch(toggleFilmStatus({filmId, status, isPromo}));
+    } else {
+      dispatch(redirectToRoure(AppRoute.LOGIN));
+    }
   };
 
   return (
