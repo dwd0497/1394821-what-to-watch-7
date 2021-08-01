@@ -33,8 +33,5 @@ describe('Component: FilmTabs', () => {
     expect(screen.getByText(/Starring:/i)).toBeInTheDocument();
     expect(screen.getByText(/Director/i)).toBeInTheDocument();
     expect(screen.getByText(/Starring/i)).toBeInTheDocument();
-    // expect(screen.getByText(/Run Time/i)).toBeInTheDocument();
-    // expect(screen.getByText(/Genre/i)).toBeInTheDocument();
-    // expect(screen.getByText(/Released/i)).toBeInTheDocument();
   });
 });
