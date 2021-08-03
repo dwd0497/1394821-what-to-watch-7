@@ -27,7 +27,6 @@ describe('Component: FilmTabs', () => {
       <FilmTabs film={film} comments={[]} />,
     );
 
-    expect(screen.getByText(/Very good/i)).toBeInTheDocument();
     expect(screen.getByText(/ratings/i)).toBeInTheDocument();
     expect(screen.getByText(/Director:/i)).toBeInTheDocument();
     expect(screen.getByText(/Starring:/i)).toBeInTheDocument();

@@ -1,24 +1,39 @@
-import React, {useRef} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Logo from '../../UI/logo/logo';
 import Footer from '../../UI/footer/footer';
 import {login} from '../../../store/api-actions';
+import {getAuthorizationStatus} from '../../../store/user/selectors';
+import {AppRoute, AuthorizationStatus} from '../../../const';
+import {Redirect} from 'react-router-dom';
 
 function Login() {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const [isFormValid, setIsFormValid] = useState(true);
   const loginRef = useRef();
   const passwordRef = useRef();
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (evt) => {
+  const onSubmitHandler = (evt) => {
     evt.preventDefault();
 
-    dispatch(login({
-      login: loginRef.current.value,
-      password: loginRef.current.value,
-    }));
+    if (loginRef.current.value && loginRef.current.value.trim().length > 0 && passwordRef.current.value && passwordRef.current.value.trim().length > 0) {
+      dispatch(login({
+        login: loginRef.current.value,
+        password: passwordRef.current.value,
+      }));
+    } else {
+      setIsFormValid(false);
+    }
   };
+
+  if (authorizationStatus === AuthorizationStatus.AUTH) {
+    return  (
+      <Redirect to={AppRoute.MAIN} />
+    );
+  }
 
   return (
     <div className="user-page">
@@ -29,7 +44,7 @@ function Login() {
       </header>
 
       <div className="sign-in user-page__content">
-        <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
+        <form action="#" className="sign-in__form" onSubmit={onSubmitHandler}>
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" ref={loginRef} data-testid="login" />
@@ -44,6 +59,7 @@ function Login() {
             <button className="sign-in__btn" type="submit">Sign in</button>
           </div>
         </form>
+        {!isFormValid && <span>Проверьте корректность введнных данных</span>}
       </div>
 
       <Footer />

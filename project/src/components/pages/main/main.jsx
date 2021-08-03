@@ -16,8 +16,7 @@ import {getFilms, getPromoFilm} from '../../../store/app-data/selectors';
 
 function Main() {
   const films = useSelector(getFilms);
-  const promoFilm = useSelector(getPromoFilm);
-  const {name, genre, released, backgroundImage, posterImage, id, isFavorite} = promoFilm;
+  const {name, genre, released, backgroundImage, posterImage, id, isFavorite} = useSelector(getPromoFilm);
 
   const dispatch = useDispatch();
 
@@ -30,7 +29,7 @@ function Main() {
     <>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src={backgroundImage} alt={promoFilm} />
+          <img src={backgroundImage} alt={name} />
         </div>
         <h1 className="visually-hidden">WTW</h1>
         <header className="page-header film-card__head">
@@ -58,7 +57,7 @@ function Main() {
                   </svg>
                   <span>Play</span>
                 </Link>
-                <MyListButton filmId={id} isFavorite={isFavorite} isPromo />
+                <MyListButton filmId={id} isFavorite={isFavorite} />
               </div>
             </div>
           </div>

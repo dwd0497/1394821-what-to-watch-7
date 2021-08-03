@@ -139,7 +139,7 @@ describe('Async operations', () => {
   it('should make a correct API call to POST /favorite/:film_id/:status', () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
-    const toggleFilmStatusLoader = toggleFilmStatus({filmId:1 , status: 1, isPromo: true});
+    const toggleFilmStatusLoader = toggleFilmStatus({filmId:1 , status: 1});
 
     apiMock
       .onPost(`${APIRoute.FAVORITE}/1/1`)
@@ -147,9 +147,13 @@ describe('Async operations', () => {
 
     return toggleFilmStatusLoader(dispatch, () => {}, api)
       .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.LOAD_PROMO,
+          payload: {fake: true},
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.LOAD_FILM,
           payload: {fake: true},
         });
       });
@@ -185,10 +189,14 @@ describe('Async operations', () => {
 
     return addCommentLoader(dispatch, () => {}, api)
       .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.REDIRECT_TO_ROUTE,
           payload: `${AppRoute.FILMS}/1`,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FORM_STATE,
+          payload: false,
         });
       });
   });

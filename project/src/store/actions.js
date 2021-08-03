@@ -10,6 +10,8 @@ export const ActionType = {
   LOAD_PROMO: 'data/loadPromo',
   LOAD_FILM: 'data/loadFilm',
   LOAD_COMMENTS: 'data/loadComments',
+  CHANGE_FORM_STATE: 'app/changeFormState',
+  SHOW_ERROR: 'app/showError',
   REQUIRED_AUTHORIZATION: 'user/requiredAuthorization',
   LOGOUT: 'user/logout',
   REDIRECT_TO_ROUTE: 'app/redirectToRoure',
@@ -24,6 +26,8 @@ export const loadFavoriteFilms = createAction(ActionType.LOAD_FAVORITE_FILMS, (f
 export const loadPromo = createAction(ActionType.LOAD_PROMO, (film) => ({payload: film}));
 export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({payload: film}));
 export const loadComments = createAction(ActionType.LOAD_COMMENTS, (filmId) => ({payload: filmId}));
+export const changeFormState = createAction(ActionType.CHANGE_FORM_STATE, (isFormActive) => ({payload: isFormActive}));
+export const showError = createAction(ActionType.SHOW_ERROR, (isError) => ({payload: isError}));
 export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({payload: status}));
 export const logout = createAction(ActionType.LOGOUT);
 export const redirectToRoure = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({payload: url}));

@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {addComment} from '../../../store/api-actions';
+import {changeFormState, showError} from '../../../store/actions';
+import {getIsFormDisabled, getIsFormError} from '../../../store/app-process/selectors';
 
 const MAX_RATING = 10;
 const MIN_MESSAGE_LENGTH = 40;
@@ -11,7 +13,10 @@ const MAX_MESSAGE_LENGTH = 400;
 function AddReviewForm({filmId}) {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(null);
-  const [isFormValid, setIsFormValid] = useState(null);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const isFormDisabled = useSelector(getIsFormDisabled);
+  const isFormError = useSelector(getIsFormError);
 
   const dispatch = useDispatch();
 
@@ -21,14 +26,16 @@ function AddReviewForm({filmId}) {
 
   const onSubmitHandler = (evt) => {
     evt.preventDefault();
+    dispatch(showError(false));
 
     if (isFormValid) {
+      dispatch(changeFormState(true));
       dispatch(addComment({filmId, comment, rating}));
     }
   };
 
   return (
-    <form action="#" className="add-review__form" onSubmit={onSubmitHandler}>
+    <form action="#" className="add-review__form" onSubmit={onSubmitHandler} disabled={isFormDisabled}>
       <div className="rating">
         <div className="rating__stars">
           {Array(MAX_RATING).fill().map((star, i, arr) => (
@@ -47,6 +54,7 @@ function AddReviewForm({filmId}) {
         </div>
 
       </div>
+      {isFormError && <span>Произошла ошибка, попробуйте потворить отправку комментария</span>}
     </form>
   );
 }

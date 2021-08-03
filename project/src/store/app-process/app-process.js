@@ -1,4 +1,9 @@
-import {changeActiveFilter, setDisplayedFilmsCount, setFilteredFilmsCount} from '../actions';
+import {
+  changeActiveFilter,
+  changeFormState,
+  setDisplayedFilmsCount,
+  setFilteredFilmsCount, showError
+} from '../actions';
 import {ALL_GENRES, TYPE_GENRE, FILMS_COUNT} from '../../const';
 import {createReducer} from '@reduxjs/toolkit';
 
@@ -9,6 +14,8 @@ const initialState = {
   },
   filteredFilmsCount: 0,
   displayedFilmsCount: FILMS_COUNT,
+  isFormDisabled: false,
+  isFormError: false,
 };
 
 export const appProcess = createReducer(initialState, (builder) => {
@@ -22,5 +29,11 @@ export const appProcess = createReducer(initialState, (builder) => {
     })
     .addCase(setDisplayedFilmsCount, (state, action) => {
       state.displayedFilmsCount = action.payload;
+    })
+    .addCase(changeFormState,  (state, action) => {
+      state.isFormDisabled = action.payload;
+    })
+    .addCase(showError,  (state, action) => {
+      state.isFormError = action.payload;
     });
 });

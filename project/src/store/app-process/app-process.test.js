@@ -10,6 +10,8 @@ describe('Reducer: appProcess', () => {
       },
       filteredFilmsCount: 0,
       displayedFilmsCount: 8,
+      isFormDisabled: false,
+      isFormError: false,
     };
     expect(appProcess(undefined, {})).toEqual(initialState);
   });

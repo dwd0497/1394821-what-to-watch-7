@@ -7,7 +7,7 @@ import {
   loadSimilarFilms,
   redirectToRoure,
   requireAuthorization,
-  logout as closeSession
+  logout as closeSession, changeFormState, showError
 } from './actions';
 import {AuthorizationStatus, APIRoute, AppRoute} from '../const';
 
@@ -33,12 +33,11 @@ export const fetchFavoriteFilms = () => (dispatch, _getState, api) => (
   api.get(APIRoute.FAVORITE).then(({data}) => dispatch(loadFavoriteFilms(adaptFilmsToClient(data))))
 );
 
-export const toggleFilmStatus = ({filmId, status, isPromo}) => (dispatch, _getState, api) => (
+export const toggleFilmStatus = ({filmId, status}) => (dispatch, _getState, api) => (
   api.post(`${APIRoute.FAVORITE}/${filmId}/${status}`)
     .then(({data}) => {
-      isPromo
-        ? dispatch(loadPromo(adaptFilmToClient(data)))
-        : dispatch(loadFilm(adaptFilmToClient(data)));
+      dispatch(loadPromo(adaptFilmToClient(data)));
+      dispatch(loadFilm(adaptFilmToClient(data)));
     })
 );
 
@@ -47,7 +46,10 @@ export const fetchComments = (filmId) => (dispatch, _getState, api) => (
 );
 
 export const addComment = ({filmId, comment, rating}) => (dispatch, _getState, api) => (
-  api.post(`${APIRoute.COMMENTS}/${filmId}`, {comment, rating}).then(() => dispatch(redirectToRoure(`${AppRoute.FILMS}/${filmId}`)))
+  api.post(`${APIRoute.COMMENTS}/${filmId}`, {comment, rating})
+    .then(() => dispatch(redirectToRoure(`${AppRoute.FILMS}/${filmId}`)))
+    .catch(() => dispatch(showError(true)))
+    .finally(() => dispatch(changeFormState(false)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (

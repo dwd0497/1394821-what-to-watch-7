@@ -28,7 +28,14 @@ export const APIRoute = {
   FAVORITE: '/favorite',
 };
 
-// Временно уменьшил кол-во фильмов, чтоб тестить кнопку ShowMore, потом вернуть 20
+export const FilmRating = {
+  BAD: 'Bad',
+  NORMAL: 'Normal',
+  GOOD: 'Good',
+  VERY_GOOD: 'Very good',
+  AWESOME: 'Awesome',
+};
+
 export const FILMS_COUNT = 8;
 export const FILMS_COUNT_STEP = 8;
 export const ALL_GENRES = 'All genres';

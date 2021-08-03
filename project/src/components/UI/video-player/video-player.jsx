@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 
 import PropTypes from 'prop-types';
 
-function VideoPlayer({isPlaying, previewVideoLink, posterImage}) {
+function VideoPlayer({isPlaying, previewVideoLink, previewImage}) {
 
   const videoRef = useRef();
 
@@ -15,14 +15,14 @@ function VideoPlayer({isPlaying, previewVideoLink, posterImage}) {
   }, [isPlaying]);
 
   return (
-    <video src={previewVideoLink} muted className="player__video" poster={posterImage} ref={videoRef} />
+    <video src={previewVideoLink} muted className="player__video" poster={previewImage} ref={videoRef} />
   );
 }
 
 VideoPlayer.propTypes = {
   isPlaying: PropTypes.bool.isRequired,
   previewVideoLink: PropTypes.string.isRequired,
-  posterImage: PropTypes.string.isRequired,
+  previewImage: PropTypes.string.isRequired,
 };
 
 export default VideoPlayer;

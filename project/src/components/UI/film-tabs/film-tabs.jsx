@@ -6,7 +6,7 @@ import filmCommentProp from './film-comment.prop';
 
 import {Tabs} from '../../../const';
 
-import {convertMinutesToHours, formatDate} from '../../../utils/utils';
+import {convertMinutesToHours, formatDate, rateFilm} from '../../../utils/utils';
 
 const getEvenElements = (elements) => elements.filter((element, id) => id % 2 === 0);
 
@@ -49,7 +49,7 @@ function FilmTabs({film, comments}) {
           <div className="film-rating">
             <div className="film-rating__score">{rating}</div>
             <p className="film-rating__meta">
-              <span className="film-rating__level">Very good</span>
+              <span className="film-rating__level">{rateFilm(rating)}</span>
               <span className="film-rating__count">{scoresCount} ratings</span>
             </p>
           </div>

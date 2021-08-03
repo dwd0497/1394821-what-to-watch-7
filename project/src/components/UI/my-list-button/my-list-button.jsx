@@ -7,7 +7,7 @@ import {getAuthorizationStatus} from '../../../store/user/selectors';
 import {AppRoute, AuthorizationStatus} from '../../../const';
 import {redirectToRoure} from '../../../store/actions';
 
-function MyListButton({filmId, isFavorite, isPromo = false}) {
+function MyListButton({filmId, isFavorite}) {
   const dispatch = useDispatch();
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
@@ -15,7 +15,7 @@ function MyListButton({filmId, isFavorite, isPromo = false}) {
     evt.preventDefault();
     if (authorizationStatus === AuthorizationStatus.AUTH) {
       const status = isFavorite ? 0 : 1;
-      dispatch(toggleFilmStatus({filmId, status, isPromo}));
+      dispatch(toggleFilmStatus({filmId, status}));
     } else {
       dispatch(redirectToRoure(AppRoute.LOGIN));
     }
@@ -40,7 +40,6 @@ function MyListButton({filmId, isFavorite, isPromo = false}) {
 MyListButton.propTypes = {
   isFavorite: PropTypes.bool.isRequired,
   filmId: PropTypes.number.isRequired,
-  isPromo: PropTypes.bool,
 };
 
 export default MyListButton;
